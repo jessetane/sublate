@@ -1,48 +1,55 @@
 # Crucible
 
-An autonomous 3-agent dialectic development workflow for AI coding assistants.
+An autonomous, dialectic multi-agent development workflow for AI coding assistants.
 
-Crucible replaces linear AI execution with a rigorous, adversarial feedback loop governed by a senior technical lead persona.
+Crucible replaces linear AI execution with a rigorous, adversarial feedback loop governed by a senior technical lead persona. Instead of letting a single agent write code and self-certify its own work, Crucible orchestrates a dialectic between implementation, adversarial audit, and architectural triage.
 
-```text
-                              ┌────────────────────────────────────────────────────────┐
-                              │                                                        │
-                              ▼                                                        │
-[Setup: Scope] ──> [Beat 1: Worker] ──(git diff)──> [Beat 2: Reviewer] ──> [Beat 3: Decider]
-                                                                               │
-                                                                     (Clean? 0 Issues)
-                                                                               │
-                                                                               ▼
-                                                                    [### STATUS: COMPLETE]
+```mermaid
+flowchart TD
+    Start(["Task / Feature Request"]) --> Setup["Setup: Initial Scoping & Upfront Refactoring"]
+    Setup --> Worker["Beat 1: Worker (Implementation)"]
+
+    subgraph DialecticLoop ["The Continuous 3-Beat Dialectic Loop"]
+        Worker -->|"Cumulative git diff"| Reviewer["Beat 2: Reviewer (Adversarial Audit)"]
+        Reviewer -->|"Findings & principle violations"| Decider{"Beat 3: Decider (Gatekeeper Triage)"}
+        
+        Decider -->|"Issues Accepted (Action Plan N+1)"| Worker
+    end
+
+    Decider -->|"Clean Review (Terminal Invariant Met)"| Complete(["STATUS: COMPLETE"])
 ```
 
 ---
 
-## The 3-Beat State Machine
+## How It Works
+
+Crucible organizes development into a continuous **3-Beat State Machine**:
 
 1. **Beat 1: Implementation (Worker)**  
-   Applies the scoped action plan in a focused context, verifies changes locally, and makes logical git commits.
+   A focused subagent executes concrete code changes against the active plan, validates edits locally, and creates logical, focused git commits.
 2. **Beat 2: Adversarial Audit (Reviewer)**  
-   Audits the cumulative git diff (`git diff <base_commit>..HEAD`) against the specification and core principles in an isolated context. Surfaces bugs, broken symmetry, edge cases, and duplication with exact line citations.
+   An isolated subagent audits the cumulative git diff (`git diff <base_commit>..HEAD`) against the task specification and architectural rubric. It hunts for logic bugs, broken symmetry, edge cases, and code duplication, citing exact files and line numbers.
 3. **Beat 3: Gatekeeper Triage & Decision (Decider)**  
-   Triages findings against the **7 Core Engineering Principles**. Accepts root-cause fixes, rejects defensive bloat, and either loops back to Beat 1 with a refined plan or signs off when the review is clean.
+   The primary agent acts as technical lead and gatekeeper. It triages reviewer findings, discards defensive bloat or 0%-probability theoretical edge cases, accepts root-cause fixes, and formulates the next action plan.
 
 > [!IMPORTANT]
-> **The Terminal Invariant**: The Decider is **always** the terminal actor. A Crucible run can **never** terminate directly after a Worker turn. Every code change must undergo adversarial audit and decider review before completion.
+> **The Terminal Invariant**: The Decider is **always** the terminal actor. A Crucible run can **never** terminate directly after a Worker turn. Every code modification must undergo an adversarial audit and decider review before completion. The loop terminates only when a review cycle completes with zero accepted blocking issues.
 
 ---
 
-## The 7 Core Engineering Principles
+## Shared Engineering Principles
 
-All three roles operate under a shared engineering rubric:
+Rather than relying on vague prompts like "write clean code," all three roles in Crucible are aligned around a **shared architectural rubric** defined in [SKILL.md](./SKILL.md):
 
-1. **The Producer Check**: Fix the root cause in the producer rather than accepting defensive band-aids (`?.`, `?? ''`, empty fallbacks) in the consumer.
-2. **The Fail-Loud Check**: Reject silent fallbacks that swallow exceptions or mask broken invariants.
-3. **The Single-Source-of-Truth Check**: Eliminate duplicate code paths, redundant fallback layers, and legacy wrappers.
-4. **The Real-World Blast Radius Check**: Discard theoretical 0%-probability edge cases; focus strictly on real failure modes.
-5. **The Upstream Origin Check**: Do not paper over upstream bugs in consumer repos; isolate and fix at the source.
-6. **The Symmetry & Terseness Check**: Maintain terse naming, paired lifecycle verbs (`open`/`close`), and cross-layer noun consistency.
-7. **The DRY & Abstraction Signal Check**: Treat repetition as a guiding light signaling an opportunity to refactor and consolidate upfront before adding new features.
+* **Root Cause over Band-Aids**: Consumer defenses (`?.`, empty fallbacks) that mask bugs are rejected; fixes must be applied to the producer.
+* **Fail Loud**: Silent fallbacks that swallow exceptions or broken invariants are forbidden.
+* **Single Source of Truth**: Duplicate execution paths and backwards-compatibility shims are eliminated in favor of one canonical implementation.
+* **Pragmatic DRY as a Guiding Light**: Repetition and competing patterns signal an opportunity to abstract, prioritized upfront before layering on new features.
+* **API Symmetry & Terseness**: Enforces paired lifecycle verbs, concise naming without redundant prefixes, and cross-layer noun consistency.
+
+Because the Worker, Reviewer, and Decider all reference the same rubric, audit findings cite specific principles by name, eliminating ambiguous review feedback.
+
+For the full text and definitions of all 7 principles, see [SKILL.md](./SKILL.md).
 
 ---
 
