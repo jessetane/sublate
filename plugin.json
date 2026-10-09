@@ -1,5 +1,0 @@
-{
-	"name": "crucible",
-	"description": "Autonomous 3-agent dialectic development loop (Worker, Reviewer, Decider)",
-	"disabled": true
-}
