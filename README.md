@@ -46,7 +46,7 @@ sublate/
     └── design-rfc.md             # Architectural RFCs, specs & strategy rubric
 ```
 
-* **[`lenses/software-engineering.md`](./lenses/software-engineering.md)** *(default for code)*: Producer Check, Fail-Loud, Single-Source-of-Truth, Real-World Blast Radius, Upstream Origin, Symmetry & Terseness, Upfront DRY, and Git history curation.  
+* **[`lenses/software-engineering.md`](./lenses/software-engineering.md)** *(default for code)*: Minimal Mechanism, Single Source of Truth, Upfront DRY, Fix the Producer (Not the Consumer), Fail Loud, Symmetry & Terseness, Native Platform & Dense Style, and Git history curation.  
 * **[`lenses/design-rfc.md`](./lenses/design-rfc.md)** *(default for specs/RFCs)*: Falsifiable claims, explicit trade-offs, single canonical model, boundary invariants, and signal-to-noise.  
 * **Swapping & Customizing Lenses**:
   1. Pass `--lens <name|path>` in the prompt (e.g. `--lens design-rfc` or `--lens ./my-lens.md`), or let Synthesis auto-detect from the task.  
