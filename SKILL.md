@@ -48,7 +48,9 @@ Subagents default to `inherit` (using the parent session's active model), but ca
 > **STATE, CONTINUITY & CONVERGENCE INVARIANTS:**  
 > 1. **Master Objective (`<master_objective>`)**: Sublate cannot boot without a clearly stated target goal or contract. If the user invokes Sublate with an ambiguous goal, Synthesis must halt and elicit clarity before proceeding.  
 > 2. **Immutable Baseline Anchor (`<base_anchor>`)**: Record the starting state before Thesis makes any edits—in git repositories, `<base_commit>` (`git rev-parse HEAD`, stashing/snapshotting dirty state first); in non-git workspaces, a baseline snapshot of target files. `<base_anchor>` never moves during the run.  
-> 3. **Persistent Subagent Continuity**: Do NOT spawn disposable subagents on every iteration when the runtime supports messaging existing subagents (`send_message`). Spawn one **Thesis** subagent and one **Antithesis** subagent on Iteration 1, and message those same instances on Iterations $2 \dots N$ so both retain context memory while remaining isolated from each other.  
+> 3. **Tactical Continuity vs. Renewal (`send_message` vs. `invoke_subagent`)**: Synthesis actively governs whether to **reuse** an existing subagent (`send_message`) or **spawn a fresh one** (`invoke_subagent`) on Iterations $2 \dots N$:  
+>    - **Continuity (`send_message`)**: When an agent's stochastic draw is strong—e.g., Thesis built a clean foundation that only needs surgical `[SUBLATE]` refinements, or Antithesis delivered high-signal falsifications—reuse that instance so it retains its cached working memory and momentum.  
+>    - **Renewal (`invoke_subagent`)**: When a `[TRANSCEND]` directive calls for a paradigm shift, when Thesis is anchored on a clunky implementation, or when Antithesis suffers from reviewer tunnel-vision / high `[NEGATE]` noise, drop the prior subagent and spawn a fresh instance for an unanchored stochastic draw.  
 > 4. **The Settled Ledger (Anti-Oscillation)**: Synthesis maintains a compact ledger of `[NEGATE]` decisions across iterations. Once a critique is negated by Synthesis, it is passed to Antithesis as **settled law** and cannot be re-litigated in future beats.
 
 ```mermaid
@@ -81,9 +83,9 @@ flowchart TD
 - **Mandatory Transition**: When Thesis reports back, Synthesis **MUST NOT** terminate the run. Synthesis captures the new state/commit and transitions immediately to **Beat 2**.
 
 ### Beat 2: Negation & Stress-Testing (Antithesis Subagent)
-- **Iteration 1**: Launch the **Antithesis** subagent (`invoke_subagent`) with the full **Antithesis Charter** (Part III.B) and active **Domain Lens** to audit `<base_anchor>..current` against `<master_objective>`.
-- **Iterations $2 \dots N$ (Compact Delta Protocol)**: Because Antithesis persists across iterations, its Charter, Domain Lens, and prior audit are already in its cached context prefix. Synthesis messages the existing Antithesis subagent (`send_message`) with **only** the delta payload (never re-injecting the Charter or Domain Lens):
-  1. The **Iteration Delta (`<last_reviewed_state>..current`)** as the primary diff target (avoiding re-dumping unchanged diffs from `<base_anchor>..<last_reviewed_state>` into context; `<base_anchor>` is referenced only to verify net boundary alignment or if Antithesis's context was auto-compacted).
+- **Iteration 1 (or Fresh Renewal via `invoke_subagent`)**: Launch a fresh **Antithesis** subagent with the full **Antithesis Charter** (Part III.B), active **Domain Lens**, and current **Settled Ledger** to audit `<base_anchor>..current` with cold, unanchored eyes. Use a fresh Antithesis on Iteration 1, after any major `[TRANSCEND]` rewrite, or whenever the prior Antithesis exhibited tunnel vision or low-signal `[NEGATE]` noise.
+- **Iterations $2 \dots N$ (Continuity via `send_message`)**: When the existing Antithesis subagent is sharp and verifying targeted `[SUBLATE]` fixes, message it (`send_message`) with **only** the delta payload (omitting the Charter and Domain Lens already in its cached prefix):
+  1. The **Iteration Delta (`<last_reviewed_state>..current`)** as the primary diff target.
   2. The updated **Settled Ledger** from prior beats so Antithesis does not re-litigate negated points.
 - **Mandatory Transition**: When Antithesis reports its findings and provocations, Synthesis proceeds to **Beat 3**.
 
@@ -94,7 +96,9 @@ flowchart TD
   - `[NEGATE]` — Theoretical 0%-probability fantasy, unproved root-cause path, or pedantic noise that would add defensive bloat. Strike into the **Settled Ledger**.
   - `[EXTERNALIZE]` — Issue originates in an upstream dependency or external boundary outside this scope; isolate rather than papering over locally.
 - **Branch A — Active Directives Remain (`sublate_or_transcend.length > 0`)**:
-  - Synthesis sends a compact follow-up (`send_message`) to the persistent **Thesis** subagent containing **only** the next chunked Action Plan and updated Settled Ledger (never re-injecting the Thesis Charter or Domain Lens, which remain in Thesis's cached context prefix), looping back to **Beat 1**.
+  - Synthesis chooses between **Continuity** and **Renewal** for **Thesis** (looping back to **Beat 1**):
+    - **Continuity (`send_message` to existing Thesis)**: Default for `[SUBLATE]` refinements when Thesis's architecture is sound—sends only the chunked Action Plan and updated Settled Ledger (reusing Thesis's cached context).
+    - **Renewal (`invoke_subagent` with fresh Thesis)**: Preferred for major `[TRANSCEND]` paradigm shifts or when the prior Thesis got stuck in a clunky rut—optionally resets/cleans the working state to `<base_anchor>` and dispatches a fresh Thesis with the full Charter, Domain Lens, and Settled Ledger.
   - *Convergence Guardrail*: If the loop reaches Iteration 4 without converging, Synthesis pauses to surface the remaining tension to the user or executes a strategic reset to `<base_anchor>`.
 - **Branch B — Convergence Achieved (`sublate_or_transcend.length === 0`)**:
   - Synthesis performs final curation (e.g., curating git commit history if multiple iterations created fixup commits) and runs final verification.
@@ -134,7 +138,7 @@ Unlike monolithic rubrics where every agent reads the same checklist—creating 
    Build direct, confident structures. Never mask broken upstream state with silent fallbacks or consumer band-aids.
 
 ### Thesis Prompt Blueprints
-**Iteration 1 (`invoke_subagent`)**:
+**Initial or Fresh Renewal (`invoke_subagent`)**:
 ```text
 You are THESIS (The Architect-Artisan) for this Sublate run.
 
@@ -144,7 +148,7 @@ ACTION PLAN:
 <Numbered list of concrete, scoped tasks with exact targets>
 
 SETTLED LEDGER (Do not add defensive bloat for these negated items):
-None (Iteration 1)
+<List of negated items from prior iterations, or "None (Iteration 1)">
 
 UNIVERSAL THESIS CHARTER (Assertion, Craft & Inevitability):
 - INEVITABILITY & SUBTRACTION: Create work that feels discovered, not bolted together. Prefer removing state and assumptions over adding glue.
@@ -156,7 +160,7 @@ ACTIVE DOMAIN LENS (<lens_name>):
 <Inject Thesis rules & verification steps from active lenses/*.md file>
 ```
 
-**Iterations $2 \dots N$ (`send_message` to persistent Thesis — omit Charter & Lens)**:
+**Continuity Follow-Up (`send_message` to existing Thesis — omit Charter & Lens)**:
 ```text
 ITERATION <N> ACTION PLAN ([SUBLATE] / [TRANSCEND] Directives):
 <Numbered list of concrete, root-cause tasks with exact targets>
@@ -179,14 +183,14 @@ SETTLED LEDGER (Do not add defensive bloat for these negated items):
    Do not merely act as a mechanical bug linter. Call out **clunky compliance**—work that technically satisfies the prompt but operates like a Rube Goldberg machine (threading excessive flags, leaky abstractions, joyless ergonomics). In every review, offer **1–2 Structural Provocations**: boundary-pushing questions showing how inverting an assumption or rethinking the model could collapse complexity.
 
 ### Antithesis Prompt Blueprints
-**Iteration 1 (`invoke_subagent`)**:
+**Initial or Fresh Renewal (`invoke_subagent`)**:
 ```text
 You are ANTITHESIS (The Iconoclast) for this Sublate run.
 
 MASTER OBJECTIVE: <master_objective>
 BASELINE ANCHOR: <base_anchor>
 SETTLED LEDGER (Settled Law — DO NOT re-litigate these negated points):
-None (Iteration 1)
+<List of negated items from prior iterations, or "None (Iteration 1)">
 
 YOUR TASK:
 Inspect the changes (`<base_anchor>..current`) alongside surrounding context. Challenge the Thesis under two distinct headings:
@@ -203,7 +207,7 @@ ACTIVE DOMAIN LENS (<lens_name>):
 <Inject Antithesis audit rules from active lenses/*.md file>
 ```
 
-**Iterations $2 \dots N$ (`send_message` to persistent Antithesis — omit Charter & Lens)**:
+**Continuity Follow-Up (`send_message` to existing Antithesis — omit Charter & Lens)**:
 ```text
 ITERATION <N> DELTA AUDIT
 LAST REVIEWED STATE: <last_reviewed_state>
