@@ -22,10 +22,10 @@ Sublate cleanly decouples the **Universal Dialectic Engine & Orthogonal Role Cha
 At Setup, Synthesis resolves the active Domain Lens using the following precedence order:
 
 1. **Explicit Invocation Override (`--lens <name|path>` or natural language)**:
-   - If the user passes `--lens <name>` (e.g., `/sublate --lens design-rfc ...`) or asks for a lens in natural language, load `lenses/<name>.md` from the skill directory (or resolve `<path>` directly if a relative/absolute file path is given).
+   - If the user passes `--lens <name>` (e.g., `/sublate --lens cad-bim ...`) or asks for a lens in natural language, load `lenses/<name>.md` from the skill directory (or resolve `<path>` directly if a relative/absolute file path is given).
 2. **Task-Type Auto-Detection (Base Lens)**:
    - **Code, Refactoring & Systems Architecture**: Load [`lenses/software-engineering.md`](./lenses/software-engineering.md).
-   - **Design Docs, RFCs, Specifications & Strategy**: Load [`lenses/design-rfc.md`](./lenses/design-rfc.md).
+   - **Parametric CAD, 3D Modeling & OpenBIM (FreeCAD)**: Load [`lenses/cad-bim.md`](./lenses/cad-bim.md).
 3. **Project-Local `.sublate.md` (Overlay or Standalone Replacement)**:
    - Always check if `.sublate.md` exists in the workspace root:
      - **Standalone Lens**: If `.sublate.md` defines explicit `THESIS_LENS`, `ANTITHESIS_LENS`, and `SYNTHESIS_LENS` blocks (or sets `mode: replace`), use it as the sole active lens.

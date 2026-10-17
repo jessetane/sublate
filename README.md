@@ -43,13 +43,13 @@ sublate/
 ├── SKILL.md                      # Dialectic engine, role charters & prompt blueprints
 └── lenses/
     ├── software-engineering.md   # 7 core engineering principles + git baseline protocol
-    └── design-rfc.md             # Architectural RFCs, specs & strategy rubric
+    └── cad-bim.md                # Parametric CAD & OpenBIM (FreeCAD) rubric + MCP protocol
 ```
 
 * **[`lenses/software-engineering.md`](./lenses/software-engineering.md)** *(default for code)*: Minimal Mechanism, Single Source of Truth, Upfront DRY, Fix the Producer (Not the Consumer), Fail Loud, Symmetry & Terseness, Native Platform & Dense Style, and Git history curation.  
-* **[`lenses/design-rfc.md`](./lenses/design-rfc.md)** *(default for specs/RFCs)*: Falsifiable claims, explicit trade-offs, single canonical model, boundary invariants, and signal-to-noise.  
+* **[`lenses/cad-bim.md`](./lenses/cad-bim.md)** *(default for CAD/BIM)*: Master Sketch & Datum Topology, Spreadsheet/VarSet Expressions, `App::Link` Instantiation, Fix the Source Sketch (Never Boolean-Patch Downstream), Watertight Clash-Free Solids (`Shape.isValid()`, pairwise interference & FEM checks), OpenBIM/IFC Hygiene, and token-conscious FreeCAD MCP execution.  
 * **Swapping & Customizing Lenses**:
-  1. Pass `--lens <name|path>` in the prompt (e.g. `--lens design-rfc` or `--lens ./my-lens.md`), or let Synthesis auto-detect from the task.  
+  1. Pass `--lens <name|path>` in the prompt (e.g. `--lens cad-bim` or `--lens ./my-lens.md`), or let Synthesis auto-detect from the task.  
   2. Drop a `.sublate.md` in a repo root to append project-specific rules onto the base lens (or include `THESIS_LENS` / `ANTITHESIS_LENS` / `SYNTHESIS_LENS` blocks to replace the base lens entirely).  
   3. Add `<name>.md` files to `lenses/` to make `--lens <name>` available globally.  
 * **Models**: Subagents default to `inherit`, or can be overridden per role in the prompt.  
@@ -70,14 +70,14 @@ $ git clone https://github.com/jessetane/sublate.git ~/.claude/skills/sublate
 
 ## Usage
 ```text
-# Default (auto-detects lens from task)
+# Default (auto-detects software-engineering or cad-bim from task)
 /sublate unify watcher lifecycle and remove duplicate event emitters
 
-# Swap to a specific built-in or custom lens
-/sublate --lens design-rfc draft the multi-region replication spec
-/sublate --lens ./docs/security-lens.md harden the token verification boundary
+# Parametric CAD / OpenBIM in FreeCAD
+/sublate --lens cad-bim frame the south wall and ledger assembly from global-vars
 
-# Override models per role
+# Custom lens file or per-role model overrides
+/sublate --lens ./docs/security-lens.md harden the token verification boundary
 /sublate with flash for thesis and pro for antithesis: refactor the query planner
 ```
 
