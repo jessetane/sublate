@@ -55,10 +55,21 @@ sublate/
     └── design-rfc.md             # Architectural RFCs, System Specs & Strategy Rubric
 ```
 
-* **[`lenses/software-engineering.md`](./lenses/software-engineering.md)** *(default for code tasks)*: Partitions the 7 Core Engineering Principles (*Producer Check, Fail-Loud, Single-Source-of-Truth, Real-World Blast Radius, Upstream Origin, Symmetry & Terseness, Pragmatic DRY*) and the Git Baseline & Non-Interactive History Curation protocol across Thesis, Antithesis, and Synthesis.  
-* **[`lenses/design-rfc.md`](./lenses/design-rfc.md)** *(default for specs, RFCs, and strategy)*: Enforces falsifiable claims, explicit trade-offs, single canonical models, boundary invariants, and high signal-to-noise prose.  
-* **Custom Lenses**: Add markdown rubrics with `THESIS_LENS`, `ANTITHESIS_LENS`, and `SYNTHESIS_LENS` blocks to `lenses/`, drop a `.sublate.md` in a project root, or pass `--lens <name>` at invocation.  
-* **Model Matrix**: Subagents default to `self` (`inherit`), or can be routed per role on demand (e.g. a fast craft model for Thesis, a deep-reasoning model for Antithesis, and your lead model for Synthesis).  
+### Built-In Lenses
+* **[`lenses/software-engineering.md`](./lenses/software-engineering.md)** *(auto-selected for code tasks)*: Partitions the 7 Core Engineering Principles (*Producer Check, Fail-Loud, Single-Source-of-Truth, Real-World Blast Radius, Upstream Origin, Symmetry & Terseness, Pragmatic DRY*) and the Git Baseline & Non-Interactive History Curation protocol across Thesis, Antithesis, and Synthesis.  
+* **[`lenses/design-rfc.md`](./lenses/design-rfc.md)** *(auto-selected for specs, RFCs, and strategy)*: Enforces falsifiable claims, explicit trade-offs, single canonical models, boundary invariants, and high signal-to-noise prose.  
+
+### Swapping & Customizing Lenses
+At Setup, Synthesis resolves the active lens in this order:
+1. **Explicit Flag or Prompt (`--lens <name|path>`)**: Pass `--lens design-rfc`, `--lens ./my-lens.md`, or specify the lens in natural language.  
+2. **Task Auto-Detection**: Automatically selects `software-engineering` for code/refactoring or `design-rfc` for specs/RFCs.  
+3. **Project-Local `.sublate.md` (Overlay or Replace)**: Drop a `.sublate.md` file in any repository root:
+   * **Overlay mode (default)**: Write repo-specific rules in `.sublate.md` and they are automatically appended onto the active base lens.  
+   * **Standalone mode**: Include `THESIS_LENS`, `ANTITHESIS_LENS`, and `SYNTHESIS_LENS` blocks (or `mode: replace`) in `.sublate.md` to completely replace the built-in lens.  
+4. **Adding Global Lenses**: Drop any `<name>.md` file with `THESIS_LENS`, `ANTITHESIS_LENS`, and `SYNTHESIS_LENS` sections into `lenses/` to make `--lens <name>` available everywhere.  
+
+### Model Matrix
+Subagents default to `self` (`inherit`), or can be routed per role on demand (e.g. a fast craft model for Thesis, a deep-reasoning model for Antithesis, and your lead model for Synthesis).
 
 ## Install
 
@@ -76,7 +87,15 @@ $ git clone https://github.com/jessetane/sublate.git ~/.claude/skills/sublate
 
 ## Usage
 ```text
-/sublate <feature, refactor, or architectural goal>
+# Default (auto-detects lens from task type)
+/sublate unify watcher lifecycle and remove duplicate event emitters
+
+# Swap to a specific built-in or custom lens
+/sublate --lens design-rfc draft the multi-region replication architecture spec
+/sublate --lens ./docs/security-lens.md harden the token verification boundary
+
+# Override models per role in natural language
+/sublate with flash for thesis and pro for antithesis: refactor the query planner
 ```
 
 ## License
