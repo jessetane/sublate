@@ -2,12 +2,12 @@
 Autonomous Hegelian dialectic workflow for AI agents: *Thesis → Antithesis → Synthesis*.
 
 ## Why
-Most multi-agent coding loops fall into one of two traps: either a single agent grades its own homework, or a "worker and reviewer" read from the exact same checklist—creating a bureaucratic monoculture where iterations slowly sandpaper off all elegance into a bloated committee compromise.
+When working through a complex problem, it helps to wear three distinct hats: **building boldly** toward the cleanest possible form, **stress-testing ruthlessly** to break hidden assumptions, and **stepping back to curate** so fixes deepen the design rather than burying it under defensive band-aids.
 
-`sublate` (from Hegel's *Aufheben*: to simultaneously *cancel* flaws, *preserve* essence, and *elevate* to a higher plane) replaces the checklist monoculture with **three orthogonal forces** designed to collide productively, paired with role-partitioned domain lenses.
+`sublate` (from Hegel's *Aufheben*: to simultaneously *cancel* flaws, *preserve* essence, and *elevate* to a higher plane) automates that workflow by separating those three hats into **orthogonal agent roles**, paired with role-partitioned domain lenses.
 
 ## How
-* **Orthogonal Charters**: Each agent optimizes for a distinct structural and aesthetic vector instead of repeating the same rubric.  
+* **Orthogonal Charters**: Each role optimizes for a distinct structural and aesthetic vector—creation, falsification, and curation.  
 * **Empirical Antithesis**: Antithesis runs with shell execution under an **Immutable Workspace Constraint**—allowing it to run `git diff`, test suites, and one-liner reproducers to empirically falsify assumptions rather than guessing from static text.  
 * **Tactical Continuity vs. Renewal**: Synthesis dynamically chooses whether to reuse a subagent (`send_message`) to ride strong momentum and cached working memory on surgical `[SUBLATE]` fixes, or spawn a fresh instance (`invoke_subagent`) for cold, unanchored eyes on `[TRANSCEND]` paradigm shifts or when a prior agent is stuck in a rut.  
 * **The Settled Ledger**: Negated critiques (`[NEGATE]`) are indexed (`[F#]` / `[P#]`) and passed into subsequent beats as settled law so Antithesis cannot re-litigate rejected points or cause ping-pong oscillation.  
@@ -34,7 +34,7 @@ flowchart TD
 | :--- | :--- | :--- | :--- |
 | **1. THESIS** | **The Architect-Artisan** *(Assertion)* | Canonical Unity, Symmetry & Terseness, Directness, Upfront Consolidation | **Inevitability & Negative Space** — Sculpting by subtraction; work that feels *discovered* rather than bolted together with glue. |
 | **2. ANTITHESIS** | **The Iconoclast** *(Negation)* | Empirical Falsification with Causal Proof, Boundary Stress-Testing, Contract Auditing | **Challenging Mediocrity** — Calling out clunky "Rube Goldberg" compliance and offering *Structural Provocations* to collapse complexity. |
-| **3. SYNTHESIS** | **The Sublator** *(Elevation)* | Real-World Blast Radius, Root-Cause over Band-Aid, Upstream Hygiene, Settled Ledger | **Anti-Committee Stewardship** — Forbidding defensive patchwork that scars the design; demanding fixes that deepen elegance. |
+| **3. SYNTHESIS** | **The Sublator** *(Elevation)* | Real-World Blast Radius, Root-Cause over Band-Aid, Upstream Hygiene, Settled Ledger | **Taste-Preserving Stewardship** — Forbidding defensive patchwork that scars the design; demanding fixes that deepen elegance. |
 
 ### Verdicts (Beat 3)
 * **`[SUBLATE]`**: Valid flaw or contract drift; fix the upstream root cause cleanly without consumer band-aids.  

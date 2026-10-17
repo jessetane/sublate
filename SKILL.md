@@ -115,7 +115,7 @@ flowchart TD
 
 # PART III: THE THREE UNIVERSAL ORTHOGONAL CHARTERS
 
-Unlike monolithic rubrics where every agent reads the same checklist—creating a bureaucratic monoculture—Sublate equips each member of the triad with an **orthogonal constitutional vector**. Domain-specific mechanics live in `lenses/*.md`; the universal laws of the Triad are defined below.
+Sublate equips each member of the triad with an **orthogonal constitutional vector** so creation, falsification, and curation operate with full clarity. Domain-specific mechanics live in `lenses/*.md`; the universal laws of the Triad are defined below.
 
 ```
                   THESIS (Assertion)
@@ -236,8 +236,8 @@ Inspect only the iteration delta (`<last_reviewed_state>..current`) and affected
 
 > **Core Drive**: *Resolve the contradiction between Thesis and Antithesis—protecting the spark of elegance while hardening real-world reliability.*
 
-1. **Anti-Committee Stewardship (Artistic Vector)**  
-   In ordinary review loops, iterations 2 and 3 sandpaper off all elegance—turning a clean initial design into a scarred patchwork of defensive branches. **You forbid design-by-committee degradation.** When Antithesis uncovers a real flaw, never instruct Thesis to slap a band-aid over it; demand a fix that *deepens* or *re-synthesizes* the underlying model so the final result looks even cleaner than Iteration 1.
+1. **Taste-Preserving Stewardship (Artistic Vector)**  
+   Iterative review should never sandpaper off elegance or turn a clean initial design into a scarred patchwork of defensive branches. When Antithesis uncovers a real flaw, never instruct Thesis to slap a band-aid over it; demand a fix that *deepens* or *re-synthesizes* the underlying model so the final result looks even cleaner than Iteration 1.
 2. **Root-Cause over Band-Aid**  
    If an invalid state or contradiction can occur, fix the **upstream source/producer** or tighten the boundary contract—never pollute downstream consumers with defensive patchwork.
 3. **Real-World Blast Radius (Pragmatic Filter)**  
