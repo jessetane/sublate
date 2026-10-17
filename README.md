@@ -8,7 +8,7 @@ Most multi-agent coding loops fall into one of two traps: either a single agent 
 
 ## How
 * **Orthogonal Charters**: Each agent optimizes for a distinct structural and aesthetic vector instead of repeating the same rubric.  
-* **Persistent Subagents & Delta Auditing**: Thesis and Antithesis persist across iterations and audit the iteration delta against the immutable baseline anchor (`<base_commit>..HEAD`) instead of re-reading the entire codebase from scratch on every pass.  
+* **Tactical Continuity vs. Renewal**: Synthesis dynamically chooses whether to reuse a subagent (`send_message`) to ride strong momentum and cached working memory on surgical `[SUBLATE]` fixes, or spawn a fresh instance (`invoke_subagent`) for cold, unanchored eyes on `[TRANSCEND]` paradigm shifts or when a prior agent is stuck in a rut.  
 * **The Settled Ledger**: Negated critiques (`[NEGATE]`) become settled law passed into subsequent beats so Antithesis cannot re-litigate rejected points or cause ping-pong oscillation.  
 * **Pluggable Domain Lenses**: Decouples the universal dialectic engine ([`SKILL.md`](./SKILL.md)) from domain rubrics ([`lenses/`](./lenses/)).  
 
