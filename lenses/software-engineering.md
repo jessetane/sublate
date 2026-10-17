@@ -55,5 +55,5 @@ When this lens is active in a git repository:
 2. **Thesis Milestones**: Thesis creates focused, logically contiguous commits with lowercased, topic-prefixed messages (e.g., `core: unify watcher lifecycle`).
 3. **Delta + Anchor Diffing**:
    - Iteration 1: Antithesis audits `git diff <base_commit>..HEAD`.
-   - Iterations $2 \dots N$: Antithesis audits the iteration delta (`git diff <last_reviewed_commit>..HEAD`) alongside the cumulative anchor (`git diff <base_commit>..HEAD`).
+   - Iterations $2 \dots N$: Because Antithesis persists across iterations and already holds prior context, it audits only the iteration delta (`git diff <last_reviewed_commit>..HEAD`), consulting `<base_commit>..HEAD` only if needed to verify net boundary state or after a context compaction.
 4. **History Curation**: On convergence, if multiple iterations generated intermediate fixup commits, Synthesis curates `<base_commit>..HEAD` (`rebase`, `squash`, `reword`) into clean, atomic commits before outputting `### STATUS: SUBLATED`.
