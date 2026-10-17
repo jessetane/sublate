@@ -1,79 +1,62 @@
 # sublate
-Autonomous Hegelian dialectic workflow for AI agents: *Thesis → Antithesis → Synthesis*.
+Hegelian dialectic workflow for AI agents: *Thesis → Antithesis → Synthesis*.
 
 ## Why
-When working through a complex problem, it helps to wear three distinct hats: **building boldly** toward the cleanest possible form, **stress-testing ruthlessly** to break hidden assumptions, and **stepping back to curate** so fixes deepen the design rather than burying it under defensive band-aids.
+When I use agents to build or refactor something non-trivial, I end up doing the same manual loop: have an agent build the thing, get another pass to poke holes in it, and then step in myself to throw out the pedantic nitpicks so the "fixes" don't litter the codebase with defensive band-aids (`?.`, fallback soup, extra flags).
 
-`sublate` (from Hegel's *Aufheben*: to simultaneously *cancel* flaws, *preserve* essence, and *elevate* to a higher plane) automates that workflow by separating those three hats into **orthogonal agent roles**, paired with role-partitioned domain lenses.
+`sublate` (from Hegel's *Aufheben*: to simultaneously *cancel*, *preserve*, and *elevate*) automates that loop with three distinct agent roles and pluggable domain lenses.
 
 ## How
-* **Orthogonal Charters**: Each role optimizes for a distinct structural and aesthetic vector—creation, falsification, and curation.  
-* **Empirical Antithesis**: Antithesis runs with shell execution under an **Immutable Workspace Constraint**—allowing it to run `git diff`, test suites, and one-liner reproducers to empirically falsify assumptions rather than guessing from static text.  
-* **Tactical Continuity vs. Renewal**: Synthesis dynamically chooses whether to reuse a subagent (`send_message`) to ride strong momentum and cached working memory on surgical `[SUBLATE]` fixes, or spawn a fresh instance (`invoke_subagent`) for cold, unanchored eyes on `[TRANSCEND]` paradigm shifts or when a prior agent is stuck in a rut.  
-* **The Settled Ledger**: Negated critiques (`[NEGATE]`) are indexed (`[F#]` / `[P#]`) and passed into subsequent beats as settled law so Antithesis cannot re-litigate rejected points or cause ping-pong oscillation.  
-* **Role-Partitioned Domain Lenses**: Decouples the universal dialectic engine ([`SKILL.md`](./SKILL.md)) from domain rubrics ([`lenses/`](./lenses/)), injecting only the relevant `THESIS_LENS` or `ANTITHESIS_LENS` block into each subagent.  
+* **Thesis (Builder)**: Writes the cleanest, most direct implementation (`self`).  
+* **Antithesis (Red-Team)**: Runs `git diff`, tests, and reproducers to break assumptions (`self`, read/exec only), and must trace the exact producer path (`file:line`) before claiming any state bug.  
+* **Synthesis (Arbiter)**: Filters Antithesis findings by real-world blast radius, rejects consumer band-aids, records rejected nitpicks into a **Settled Ledger** so they aren't re-litigated, and decides whether the next pass should reuse the warm subagent (`send_message`) or spawn a fresh one (`invoke_subagent`).  
+* **Domain Lenses**: Role-specific rubrics (`THESIS_LENS`, `ANTITHESIS_LENS`, `SYNTHESIS_LENS`) in [`lenses/`](./lenses/) that plug into [`SKILL.md`](./SKILL.md).  
 
 ```mermaid
 flowchart TD
-    Start(["Task / Master Objective"]) --> Setup["Setup: Load Domain Lens, Lock Baseline & Upfront Scan"]
-    Setup --> Thesis["Beat 1: THESIS (The Architect-Artisan)"]
+    Start(["Task / Master Objective"]) --> Setup["Setup: Load Lens & Lock Baseline"]
+    Setup --> Thesis["Beat 1: THESIS (Build)"]
 
-    subgraph TriadLoop ["The Hegelian Triad Loop"]
-        Thesis -->|"Iteration Delta + Baseline Anchor"| Antithesis["Beat 2: ANTITHESIS (The Iconoclast)"]
-        Antithesis -->|"Falsifications [F#] & Provocations [P#]"| Synthesis{"Beat 3: SYNTHESIS (The Sublator)"}
+    subgraph TriadLoop ["The Triad Loop"]
+        Thesis -->|"Delta + Baseline Anchor"| Antithesis["Beat 2: ANTITHESIS (Stress-Test)"]
+        Antithesis -->|"Falsifications [F#] & Provocations [P#]"| Synthesis{"Beat 3: SYNTHESIS (Adjudicate)"}
         Synthesis -->|"[SUBLATE] / [TRANSCEND] + Settled Ledger"| Thesis
     end
 
-    Synthesis -->|"Zero Active Contradictions"| Curate["Final Curation & Verification"]
+    Synthesis -->|"Zero Active Directives"| Curate["Curate History & Verify"]
     Curate --> Complete(["STATUS: SUBLATED"])
 ```
-
-## The Triad
-
-| Force | Persona | Structural Vector | Aesthetic Vector |
-| :--- | :--- | :--- | :--- |
-| **1. THESIS** | **The Architect-Artisan** *(Assertion)* | Canonical Unity, Symmetry & Terseness, Directness, Upfront Consolidation | **Inevitability & Negative Space** — Sculpting by subtraction; work that feels *discovered* rather than bolted together with glue. |
-| **2. ANTITHESIS** | **The Iconoclast** *(Negation)* | Empirical Falsification with Causal Proof, Boundary Stress-Testing, Contract Auditing | **Challenging Mediocrity** — Calling out clunky "Rube Goldberg" compliance and offering *Structural Provocations* to collapse complexity. |
-| **3. SYNTHESIS** | **The Sublator** *(Elevation)* | Real-World Blast Radius, Root-Cause over Band-Aid, Upstream Hygiene, Settled Ledger | **Taste-Preserving Stewardship** — Forbidding defensive patchwork that scars the design; demanding fixes that deepen elegance. |
 
 ### Verdicts (Beat 3)
 * **`[SUBLATE]`**: Valid flaw or contract drift; fix the upstream root cause cleanly without consumer band-aids.  
 * **`[TRANSCEND]`**: Valid structural provocation; collapse complexity by rethinking the model.  
-* **`[NEGATE]`**: 0%-probability fantasy or unproved causal path; recorded into the **Settled Ledger** as settled law.  
+* **`[NEGATE]`**: 0%-probability edge case or unproved causal path; recorded into the **Settled Ledger** as settled law.  
 * **`[EXTERNALIZE]`**: Issue belongs in an upstream library or external boundary.  
 
 > [!IMPORTANT]
-> **The Terminal Invariant**: Synthesis is **always** the terminal actor. A `sublate` run can **never** terminate directly after a Thesis turn. The loop concludes only when an audit cycle produces zero active `[SUBLATE]` or `[TRANSCEND]` directives.
+> Synthesis is always the terminal actor. A run never ends directly after a Thesis pass; it finishes only when an Antithesis + Synthesis audit cycle produces zero active `[SUBLATE]` or `[TRANSCEND]` directives.
 
 ## Lenses & Models
 
 ```text
 sublate/
-├── SKILL.md                      # Universal Hegelian Triad Engine, Role Charters & Model Matrix
+├── SKILL.md                      # Dialectic engine, role charters & prompt blueprints
 └── lenses/
-    ├── software-engineering.md   # The 7 Core Engineering Principles + Git Baseline Protocol
-    └── design-rfc.md             # Architectural RFCs, System Specs & Strategy Rubric
+    ├── software-engineering.md   # 7 core engineering principles + git baseline protocol
+    └── design-rfc.md             # Architectural RFCs, specs & strategy rubric
 ```
 
-### Built-In Lenses
-* **[`lenses/software-engineering.md`](./lenses/software-engineering.md)** *(auto-selected for code tasks)*: Partitions the 7 Core Engineering Principles (*Producer Check, Fail-Loud, Single-Source-of-Truth, Real-World Blast Radius, Upstream Origin, Symmetry & Terseness, Pragmatic DRY*) and the Git Baseline & Non-Interactive History Curation protocol across Thesis, Antithesis, and Synthesis.  
-* **[`lenses/design-rfc.md`](./lenses/design-rfc.md)** *(auto-selected for specs, RFCs, and strategy)*: Enforces falsifiable claims, explicit trade-offs, single canonical models, boundary invariants, and high signal-to-noise prose.  
-
-### Swapping & Customizing Lenses
-At Setup, Synthesis resolves the active lens in this order:
-1. **Explicit Flag or Prompt (`--lens <name|path>`)**: Pass `--lens design-rfc`, `--lens ./my-lens.md`, or specify the lens in natural language.  
-2. **Task Auto-Detection**: Automatically selects `software-engineering` for code/refactoring or `design-rfc` for specs/RFCs.  
-3. **Project-Local `.sublate.md` (Overlay or Replace)**: Drop a `.sublate.md` file in any repository root:
-   * **Overlay mode (default)**: Write repo-specific rules in `.sublate.md` and they are automatically appended onto the active base lens.  
-   * **Standalone mode**: Include `THESIS_LENS`, `ANTITHESIS_LENS`, and `SYNTHESIS_LENS` blocks (or `mode: replace`) in `.sublate.md` to completely replace the built-in lens.  
-4. **Adding Global Lenses**: Drop any `<name>.md` file with `THESIS_LENS`, `ANTITHESIS_LENS`, and `SYNTHESIS_LENS` sections into `lenses/` to make `--lens <name>` available everywhere.  
-
-### Model Matrix
-Subagents default to `self` (`inherit`), or can be routed per role on demand (e.g. a fast craft model for Thesis, a deep-reasoning model for Antithesis, and your lead model for Synthesis).
+* **[`lenses/software-engineering.md`](./lenses/software-engineering.md)** *(default for code)*: Producer Check, Fail-Loud, Single-Source-of-Truth, Real-World Blast Radius, Upstream Origin, Symmetry & Terseness, Upfront DRY, and Git history curation.  
+* **[`lenses/design-rfc.md`](./lenses/design-rfc.md)** *(default for specs/RFCs)*: Falsifiable claims, explicit trade-offs, single canonical model, boundary invariants, and signal-to-noise.  
+* **Swapping & Customizing Lenses**:
+  1. Pass `--lens <name|path>` in the prompt (e.g. `--lens design-rfc` or `--lens ./my-lens.md`), or let Synthesis auto-detect from the task.  
+  2. Drop a `.sublate.md` in a repo root to append project-specific rules onto the base lens (or include `THESIS_LENS` / `ANTITHESIS_LENS` / `SYNTHESIS_LENS` blocks to replace the base lens entirely).  
+  3. Add `<name>.md` files to `lenses/` to make `--lens <name>` available globally.  
+* **Models**: Subagents default to `inherit`, or can be overridden per role in the prompt.  
 
 ## Install
 
-Follows the open [Agent Skills](https://agentskills.io) format ([`SKILL.md`](./SKILL.md)).
+Follows the [Agent Skills](https://agentskills.io) format ([`SKILL.md`](./SKILL.md)).
 
 ### Antigravity / Gemini CLI (`agy`)
 ```sh
@@ -87,14 +70,14 @@ $ git clone https://github.com/jessetane/sublate.git ~/.claude/skills/sublate
 
 ## Usage
 ```text
-# Default (auto-detects lens from task type)
+# Default (auto-detects lens from task)
 /sublate unify watcher lifecycle and remove duplicate event emitters
 
 # Swap to a specific built-in or custom lens
-/sublate --lens design-rfc draft the multi-region replication architecture spec
+/sublate --lens design-rfc draft the multi-region replication spec
 /sublate --lens ./docs/security-lens.md harden the token verification boundary
 
-# Override models per role in natural language
+# Override models per role
 /sublate with flash for thesis and pro for antithesis: refactor the query planner
 ```
 
