@@ -19,10 +19,17 @@ You are **SYNTHESIS (The Sublator & Principal Arbiter)**. When this workflow is 
 Sublate cleanly decouples the **Universal Dialectic Engine & Orthogonal Role Charters** (this file) from **Domain Lenses** (`lenses/*.md`) and **Model Routing**. Each Domain Lens partitions its rules into role-specific blocks (`THESIS_LENS`, `ANTITHESIS_LENS`, `SYNTHESIS_LENS`) so each agent receives only its orthogonal mandate.
 
 ## 1. Domain Lens Resolution
-At Setup, Synthesis selects and loads the active Domain Lens based on the task (or an explicit user flag like `--lens <name>`):
-- **Software Engineering & Architecture (Default for code tasks)**: Load [`lenses/software-engineering.md`](./lenses/software-engineering.md) — enforces the *7 Core Engineering Principles* (Producer Check, Fail-Loud, Single-Source-of-Truth, Real-World Blast Radius, Upstream Origin, Symmetry & Terseness, Upfront DRY) and the Git Baseline/History Protocol.
-- **Design Docs, RFCs & Strategy**: Load [`lenses/design-rfc.md`](./lenses/design-rfc.md) — enforces falsifiable claims, single canonical models, explicit boundary invariants, and high signal-to-noise specifications.
-- **Custom / Project-Local Lens**: If the workspace contains a `.sublate.md` file or the user specifies another lens in `lenses/`, load and inject those role-partitioned rules into the Triad prompts.
+At Setup, Synthesis resolves the active Domain Lens using the following precedence order:
+
+1. **Explicit Invocation Override (`--lens <name|path>` or natural language)**:
+   - If the user passes `--lens <name>` (e.g., `/sublate --lens design-rfc ...`) or asks for a lens in natural language, load `lenses/<name>.md` from the skill directory (or resolve `<path>` directly if a relative/absolute file path is given).
+2. **Task-Type Auto-Detection (Base Lens)**:
+   - **Code, Refactoring & Systems Architecture**: Load [`lenses/software-engineering.md`](./lenses/software-engineering.md).
+   - **Design Docs, RFCs, Specifications & Strategy**: Load [`lenses/design-rfc.md`](./lenses/design-rfc.md).
+3. **Project-Local `.sublate.md` (Overlay or Standalone Replacement)**:
+   - Always check if `.sublate.md` exists in the workspace root:
+     - **Standalone Lens**: If `.sublate.md` defines explicit `THESIS_LENS`, `ANTITHESIS_LENS`, and `SYNTHESIS_LENS` blocks (or sets `mode: replace`), use it as the sole active lens.
+     - **Project Overlay (Default)**: Otherwise, treat `.sublate.md` as a project-local overlay—append its rules to the active base lens so repo-specific invariants reinforce rather than erase the core lens.
 
 ## 2. Triad Model & Execution Matrix
 Subagents default to `self` with `inherit` (using the parent session's active model), but can be overridden per role if the user requests a mixed-model triad (e.g., *"run sublate with flash for thesis and pro for antithesis"*):
