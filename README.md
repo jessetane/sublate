@@ -2,8 +2,6 @@
 Hegelian dialectic workflow for agents: *Thesis → Antithesis → Synthesis*.
 
 ## Why
-Solitary perspectives suffer from structural blind spots. Asking a single agent to simultaneously build, audit and curate its own work inevitably leads to defensive hedging, confirmation bias and clunky compromise. Durable and elegant engineering and design are forged through tension: an artisan to build, an iconoclast to challenge and an arbiter to elevate.
-
 After defining an objective, I frequently find myself traversing this loop by hand (often 3-5 iterations): spawn an agent to build, spawn another to tear it apart, triage the findings and repeat until convergence.
 
 `sublate` (from Hegel's *Aufheben*: to simultaneously *cancel*, *preserve* and *elevate*) operationalizes this loop into an autonomous triad with pluggable domain lenses.
