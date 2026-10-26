@@ -98,9 +98,10 @@ flowchart TD
 
 ### Beat 2: Negation & Stress-Testing (Antithesis Subagent)
 - **Iteration 1 (or Fresh Renewal)**: Launch a fresh **Antithesis** subagent/context (`invoke_subagent` or new thread) with the **Universal Antithesis Charter** (Part III.B), active **`ANTITHESIS_LENS`** block and current **Settled Ledger** to audit `<base_anchor>..current` with cold, unanchored eyes. Use a fresh Antithesis on Iteration 1, after any major `[TRANSCEND]` rewrite or whenever the prior Antithesis exhibited tunnel vision or low-signal `[NEGATE]` noise.
-- **Iterations $2 \dots N$ (Continuity)**: When the existing Antithesis context is sharp and verifying targeted `[SUBLATE]` fixes, message it (`send_message` or thread continuation) with **only** the delta payload (omitting the Charter and Domain Lens already in its cached prefix):
-  1. The **Iteration Delta (`<last_reviewed_state>..current`)** as the primary audit target.
-  2. The updated **Settled Ledger** from prior beats so Antithesis does not re-litigate negated points.
+- **Iterations $2 \dots N$ (Continuity - Two-Stage Zoom + Holistic Audit)**: When the existing Antithesis context is sharp and verifying targeted `[SUBLATE]` fixes, message it (`send_message` or thread continuation) with **only** the delta payload (omitting the Charter and Domain Lens already in its cached prefix):
+  1. **Stage 1 - Surgical Delta Zoom (`<last_reviewed_state>..current`)**: Scrutinize the newly introduced fix lines first so subtle regressions in the patch are never diluted by a large diff.
+  2. **Stage 2 - Holistic Cumulative Check (`<base_anchor>..current`)**: Before signing off (and whenever multiple iterations have touched overlapping files), inspect the net cumulative diff `<base_anchor>..current` to catch cross-iteration interactions, emergent boundary mismatches or vestigial scaffolding left behind by earlier iterations.
+  3. **Settled Ledger**: Pass the updated **Settled Ledger** from prior beats so Antithesis does not re-litigate negated points during its holistic check.
 - **Mandatory Transition**: When Antithesis reports its structured findings (`[F1..Fn]` Falsifications and `[P1..Pn]` Provocations), Synthesis proceeds to **Beat 3**.
 
 ### Beat 3: Sublation & Governance (Synthesis)
@@ -226,7 +227,7 @@ Inspect the changes (`<base_anchor>..current`) alongside surrounding context. Re
 
 **Continuity Follow-Up (Existing context / `send_message` - omit Charter & Lens)**:
 ```text
-ITERATION <N> DELTA AUDIT
+ITERATION <N> AUDIT (SURGICAL DELTA + HOLISTIC NET DIFF)
 LAST REVIEWED STATE: <last_reviewed_state>
 BASELINE ANCHOR: <base_anchor>
 
@@ -234,7 +235,9 @@ SETTLED LEDGER (Settled Law - DO NOT re-litigate these negated points):
 <List of negated items from prior iterations>
 
 YOUR TASK:
-Inspect only the iteration delta (`<last_reviewed_state>..current`) and affected surrounding context (do not re-dump the full `<base_anchor>..current` diff unless verifying net boundary alignment or recovering after context compaction). Report numbered items under FALSIFICATIONS (`[F1]`, ...) and STRUCTURAL PROVOCATIONS (`[P1]`, ...).
+1. SURGICAL DELTA ZOOM: First inspect the iteration delta (`<last_reviewed_state>..current`) to verify the targeted fixes and catch any regressions introduced by the new patch.
+2. HOLISTIC NET CHECK: Then inspect the net cumulative changeset (`<base_anchor>..current`) to verify cross-iteration coherence, boundary alignment and absence of dead/vestigial scaffolding from earlier iterations (without re-litigating the Settled Ledger).
+Report numbered items under FALSIFICATIONS (`[F1]`, ...) and STRUCTURAL PROVOCATIONS (`[P1]`, ...).
 ```
 
 ---

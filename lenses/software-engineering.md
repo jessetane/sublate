@@ -76,9 +76,9 @@ Synthesis applies these rules during **Setup** and **Beat 3**:
 1. **Boot State & Immutable `<base_anchor>`**:
    - **Clean Boot**: When the working tree is clean, record `<base_anchor>` as `git rev-parse HEAD`.  
    - **Dirty Boot (WIP Subject)**: If the working tree has uncommitted changes, inspect `git status` and `git diff`. If the dirty changes are the subject of the user's request (or active WIP to build upon), do **not** stash them away: commit them as a temporary baseline (`wip: pre-sublate baseline`) or record `HEAD` as `<base_anchor>` so Thesis builds directly on the WIP. Only `git stash push -u -m "sublate-autostash"` if the dirty changes are unrelated noise.  
-2. **Delta + Anchor Diffing**:
+2. **Delta + Anchor Diffing (Two-Stage Zoom + Holistic Audit)**:
    - **Initial or Fresh Renewal (`invoke_subagent`)**: Antithesis audits the full cumulative range (`git diff <base_anchor>..HEAD`).  
-   - **Continuity (`send_message`)**: When reusing a sharp Antithesis instance to verify targeted fixes, it audits only the iteration delta (`git diff <last_reviewed_commit>..HEAD`), consulting `<base_anchor>..HEAD` only if needed to verify net boundary alignment.  
+   - **Continuity (`send_message`)**: When reusing a sharp Antithesis instance on Iterations $2 \dots N$, it performs a two-stage audit: first zooming in on the iteration delta (`git diff <last_reviewed_commit>..HEAD`) to scrutinize the new patch, and then checking the net cumulative changeset (`git diff <base_anchor>..HEAD`) to catch cross-iteration interactions or leftover dead scaffolding before sign-off.  
 3. **Non-Interactive History Curation**:
    - On convergence, if multiple iterations generated intermediate fixup commits (or a temporary `wip: pre-sublate baseline` commit), Synthesis curates `<base_anchor>..HEAD` into clean, logical, topic-prefixed commits.  
    - **Never run `git rebase -i`** (which hangs in non-interactive shells). Instead, use `git reset --soft <base_anchor>` and create clean, atomic commits (or leave Thesis's commits intact if they are already logically structured).  
