@@ -34,7 +34,7 @@ At Setup, Synthesis resolves the active Domain Lens using the following preceden
 ## 2. Execution Substrates & Triad Matrix
 Sublate is substrate-agnostic. While originally designed for agentic harnesses with subagent primitives, the triad operates across any multi-agent or single-agent environment:
 
-* **Native Multi-Agent Runtimes (Antigravity/Gemini CLI, Claude Code Agent Teams, OpenHands)**: Synthesis acts as the parent orchestrator, dispatching child subagents (`invoke_subagent` / `spawn_agent`) and exchanging follow-ups via actor messaging (`send_message`).
+* **Native Multi-Agent Runtimes (Antigravity/Gemini CLI, Claude Code Agent Teams, OpenHands)**: Synthesis acts as the parent orchestrator, dispatching child subagents (`invoke_subagent` / `spawn_agent`) and exchanging follow-ups via actor messaging (`send_message`). In asynchronous/reactive runtimes where spawning or messaging returns immediately, Synthesis **must immediately yield its turn (call no more tools)** and wait passively for the runtime's completion wakeup—never polling status or peeking at the workspace mid-flight.
 * **Single-Agent / Sequential Runtimes (Cursor, Windsurf, Claude Code single-session, chat interfaces)**: Synthesis runs sequentially in-session, simulating the triad or prompting the user to dispatch turns across separate conversation contexts/tabs using the provided prompt blueprints.
 * **Orchestration Frameworks (LangGraph, AutoGen, CrewAI)**: Thesis and Antithesis map to worker nodes or actors; Synthesis serves as the supervisor/router evaluating convergence edges.
 
@@ -65,7 +65,8 @@ Roles default to the session's active model (`inherit`), but can be overridden p
 > 3. **Tactical Continuity vs. Renewal (Message vs. Fresh Spawn)**: Synthesis always spawns fresh **Thesis** and **Antithesis** instances at the start of each new `/sublate` invocation (never reusing leftover subagents from earlier `/sublate` runs) and terminates them upon convergence. Within a single `/sublate` run, Synthesis actively governs whether to **reuse** an existing agent context (e.g. `send_message` or thread continuation) or **spawn a fresh instance** (e.g. `invoke_subagent` or new thread) on Iterations $2 \dots N$:  
 >    - **Continuity (Thread Continuation)**: When an agent's stochastic draw is strong (e.g. Thesis built a clean foundation that only needs surgical `[SUBLATE]` refinements or Antithesis delivered high-signal falsifications), reuse that instance so it retains its cached working memory and momentum.  
 >    - **Renewal (Fresh Context)**: When a `[TRANSCEND]` directive calls for a paradigm shift, when Thesis is anchored on a clunky implementation or when Antithesis suffers from reviewer tunnel-vision / high `[NEGATE]` noise, drop the prior subagent and spawn a fresh instance for an unanchored stochastic draw.  
-> 4. **The Settled Ledger (Anti-Oscillation)**: Synthesis maintains a compact, ID-indexed ledger of `[NEGATE]` decisions across iterations. Once a critique is negated by Synthesis, it is passed to Antithesis as **settled law** and cannot be re-litigated in future beats.
+> 4. **The Settled Ledger (Anti-Oscillation)**: Synthesis maintains a compact, ID-indexed ledger of `[NEGATE]` decisions across iterations. Once a critique is negated by Synthesis, it is passed to Antithesis as **settled law** and cannot be re-litigated in future beats.  
+> 5. **Passive Yield & Zero-Polling ("Dispatch & Yield")**: Whenever Synthesis dispatches or messages **Thesis** or **Antithesis**, it **MUST immediately end its turn (emit zero additional tool calls)** until the subagent returns its completed report. While a subagent is running, Synthesis is **STRICTLY FORBIDDEN** from polling subagent status (`manage_subagents` `list`, `manage_task`), scheduling wakeup timers (`schedule`, `sleep`), sending "check-in" messages or peeking at the workspace (`git status`, `git log`, `git diff`, file reads) to monitor partial progress. Trust the harness's reactive wakeup or blocking return.
 
 ```mermaid
 flowchart TD
@@ -90,15 +91,15 @@ flowchart TD
 1. **Load Active Domain Lens**: Read the relevant lens file from [`lenses/`](./lenses/) and apply its `SYNTHESIS_LENS` setup rules.
 2. **Lock Baseline & Objective**: Record `<base_anchor>` and crystallize `<master_objective>`. Establish canonical terminology across boundaries.
 3. **Upfront Subtraction & Consolidation Scan**: Scan related existing work for competing patterns, structural friction or repetition. Consolidating abstractions is vastly cleaner *before* layering on new work than after. If an upfront consolidation simplifies the upcoming task, make it Step 1 of the initial Thesis Action Plan.
-4. **Dispatch Thesis (Iteration 1)**: Launch the **Thesis** subagent/task (`invoke_subagent` or fresh session) with `<master_objective>`, `<base_anchor>`, the initial Action Plan, the **Universal Thesis Charter** (Part III.A) and the active **`THESIS_LENS`** block.
+4. **Dispatch Thesis & Yield (Iteration 1)**: Launch the **Thesis** subagent/task (`invoke_subagent` or fresh session) with `<master_objective>`, `<base_anchor>`, the initial Action Plan, the **Universal Thesis Charter** (Part III.A) and the active **`THESIS_LENS`** block. **Immediately end your turn (call no more tools)** and wait passively for Thesis to complete and report back.
 
 ### Beat 1: Assertion & Craft (Thesis Subagent)
-- Thesis executes the action plan in a focused context, verifies work locally, records discrete milestones and returns its structured report (`COMMIT_RANGE` / `FILES_TOUCHED`, `VERIFICATION_RUN`, `KEY_DECISIONS`).
+- Thesis executes the action plan in a focused context, verifies work locally, records discrete milestones and returns its structured report (`COMMIT_RANGE` / `FILES_TOUCHED`, `VERIFICATION_RUN`, `KEY_DECISIONS`) in a single final response.
 - **Mandatory Transition**: When Thesis reports back, Synthesis **MUST NOT** terminate the run. Synthesis captures the new state and transitions immediately to **Beat 2**.
 
 ### Beat 2: Negation & Stress-Testing (Antithesis Subagent)
-- **Iteration 1 (or Fresh Renewal)**: Launch a fresh **Antithesis** subagent/context (`invoke_subagent` or new thread) with the **Universal Antithesis Charter** (Part III.B), active **`ANTITHESIS_LENS`** block and current **Settled Ledger** to audit `<base_anchor>..current` with cold, unanchored eyes. Use a fresh Antithesis on Iteration 1, after any major `[TRANSCEND]` rewrite or whenever the prior Antithesis exhibited tunnel vision or low-signal `[NEGATE]` noise.
-- **Iterations $2 \dots N$ (Continuity - Two-Stage Zoom + Holistic Audit)**: When the existing Antithesis context is sharp and verifying targeted `[SUBLATE]` fixes, message it (`send_message` or thread continuation) with **only** the delta payload (omitting the Charter and Domain Lens already in its cached prefix):
+- **Iteration 1 (or Fresh Renewal)**: Launch a fresh **Antithesis** subagent/context (`invoke_subagent` or new thread) with the **Universal Antithesis Charter** (Part III.B), active **`ANTITHESIS_LENS`** block and current **Settled Ledger** to audit `<base_anchor>..current` with cold, unanchored eyes. Use a fresh Antithesis on Iteration 1, after any major `[TRANSCEND]` rewrite or whenever the prior Antithesis exhibited tunnel vision or low-signal `[NEGATE]` noise. **Immediately end your turn (call no more tools)** and wait passively for Antithesis's report.
+- **Iterations $2 \dots N$ (Continuity - Two-Stage Zoom + Holistic Audit)**: When the existing Antithesis context is sharp and verifying targeted `[SUBLATE]` fixes, message it (`send_message` or thread continuation) with **only** the delta payload (omitting the Charter and Domain Lens already in its cached prefix), then **immediately end your turn (call no more tools)** and wait passively for its reply:
   1. **Stage 1 - Surgical Delta Zoom (`<last_reviewed_state>..current`)**: Scrutinize the newly introduced fix lines first so subtle regressions in the patch are never diluted by a large diff.
   2. **Stage 2 - Holistic Cumulative Check (`<base_anchor>..current`)**: Before signing off (and whenever multiple iterations have touched overlapping files), inspect the net cumulative diff `<base_anchor>..current` to catch cross-iteration interactions, emergent boundary mismatches or vestigial scaffolding left behind by earlier iterations.
   3. **Settled Ledger**: Pass the updated **Settled Ledger** from prior beats so Antithesis does not re-litigate negated points during its holistic check.
@@ -111,9 +112,9 @@ flowchart TD
   - `[NEGATE]`: Theoretical 0%-probability fantasy, unproved causal path or pedantic noise that would add defensive bloat. Strike into the **Settled Ledger** with a 1-line rationale.
   - `[EXTERNALIZE]`: Issue originates in an upstream system or external boundary outside this scope; isolate rather than papering over locally.
 - **Branch A - Active Directives Remain (`sublate_or_transcend.length > 0`)**:
-  - Synthesis chooses between **Continuity** and **Renewal** for **Thesis** (looping back to **Beat 1**):
-    - **Continuity (`send_message` / thread continuation)**: Default for `[SUBLATE]` refinements when Thesis's foundation is sound. Sends only the chunked Action Plan and updated Settled Ledger (reusing Thesis's cached context).
-    - **Renewal (`invoke_subagent` / fresh context)**: Preferred for major `[TRANSCEND]` paradigm shifts or when the prior Thesis got stuck in a clunky rut. Optionally resets/cleans the working state to `<base_anchor>` and dispatches a fresh Thesis with the full Charter, `THESIS_LENS` and Settled Ledger.
+  - Synthesis chooses between **Continuity** and **Renewal** for **Thesis** (looping back to **Beat 1**), dispatches the turn and **immediately ends its turn (calls no more tools)** to wait passively for Thesis:
+    - **Continuity (`send_message` / thread continuation)**: Default for `[SUBLATE]` refinements when Thesis's foundation is sound. Sends only the chunked Action Plan and updated Settled Ledger (reusing Thesis's cached context), then yields immediately.
+    - **Renewal (`invoke_subagent` / fresh context)**: Preferred for major `[TRANSCEND]` paradigm shifts or when the prior Thesis got stuck in a clunky rut. Optionally resets/cleans the working state to `<base_anchor>`, dispatches a fresh Thesis with the full Charter, `THESIS_LENS` and Settled Ledger, and yields immediately.
   - *Convergence Guardrail*: If the loop reaches Iteration 4 without converging, Synthesis pauses to surface the remaining tension to the user or executes a strategic reset to `<base_anchor>`.
 - **Branch B - Convergence Achieved (`sublate_or_transcend.length === 0`)**:
   - Synthesis performs final curation (per the active lens, e.g. non-interactive git history curation) and runs final verification.
@@ -171,6 +172,7 @@ UNIVERSAL THESIS CHARTER (Assertion, Craft & Inevitability):
 - CANONICAL UNITY: One authoritative model and vocabulary per concept. Consolidate shared structure upfront rather than duplicating parallel patterns.
 - SYMMETRY & TERSENESS: Enforce symmetrical structure, canonical terminology across boundaries and high signal-to-noise density.
 - DIRECTNESS: Build transparent, confident boundaries rather than masking broken assumptions with defensive patchwork.
+- SINGLE COMPLETION REPORT: Execute all tasks and local verification autonomously before replying. Do not send partial status check-ins; return your complete structured report in a single final response when finished.
 
 <Inject active THESIS_LENS block from lenses/*.md>
 ```
@@ -222,6 +224,8 @@ Inspect the changes (`<base_anchor>..current`) alongside surrounding context. Re
 2. STRUCTURAL PROVOCATIONS (`[P1]`, `[P2]` - Challenging Clunkiness & Mediocrity):
    - Where is Thesis working too hard, bolting on awkward state or building mechanical glue?
    - Propose 1-2 high-leverage reframings that collapse complexity or sharpen abstractions.
+
+Complete your full inspection and verification before replying; return your entire audit in a single final response without intermediate status pings.
 
 <Inject active ANTITHESIS_LENS block from lenses/*.md>
 ```
