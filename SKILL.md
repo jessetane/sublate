@@ -62,7 +62,7 @@ Roles default to the session's active model (`inherit`), but can be overridden p
 > **STATE, CONTINUITY & CONVERGENCE INVARIANTS:**  
 > 1. **Master Objective (`<master_objective>`)**: Sublate cannot boot without a clearly stated target goal or contract. If the user invokes Sublate with an ambiguous goal, Synthesis must halt and elicit clarity before proceeding.  
 > 2. **Immutable Baseline Anchor (`<base_anchor>`)**: Record the starting state before Thesis makes any edits (`<base_commit>` in git repositories, handling dirty WIP trees safely per the active lens; or a baseline file snapshot in non-git workspaces). `<base_anchor>` never moves during the run.  
-> 3. **Tactical Continuity vs. Renewal (Message vs. Fresh Spawn)**: Synthesis actively governs whether to **reuse** an existing agent context (e.g. `send_message` or thread continuation) or **spawn a fresh instance** (e.g. `invoke_subagent` or new thread) on Iterations $2 \dots N$:  
+> 3. **Tactical Continuity vs. Renewal (Message vs. Fresh Spawn)**: Synthesis always spawns fresh **Thesis** and **Antithesis** instances at the start of each new `/sublate` invocation (never reusing leftover subagents from earlier `/sublate` runs) and terminates them upon convergence. Within a single `/sublate` run, Synthesis actively governs whether to **reuse** an existing agent context (e.g. `send_message` or thread continuation) or **spawn a fresh instance** (e.g. `invoke_subagent` or new thread) on Iterations $2 \dots N$:  
 >    - **Continuity (Thread Continuation)**: When an agent's stochastic draw is strong (e.g. Thesis built a clean foundation that only needs surgical `[SUBLATE]` refinements or Antithesis delivered high-signal falsifications), reuse that instance so it retains its cached working memory and momentum.  
 >    - **Renewal (Fresh Context)**: When a `[TRANSCEND]` directive calls for a paradigm shift, when Thesis is anchored on a clunky implementation or when Antithesis suffers from reviewer tunnel-vision / high `[NEGATE]` noise, drop the prior subagent and spawn a fresh instance for an unanchored stochastic draw.  
 > 4. **The Settled Ledger (Anti-Oscillation)**: Synthesis maintains a compact, ID-indexed ledger of `[NEGATE]` decisions across iterations. Once a critique is negated by Synthesis, it is passed to Antithesis as **settled law** and cannot be re-litigated in future beats.
@@ -117,6 +117,7 @@ flowchart TD
   - *Convergence Guardrail*: If the loop reaches Iteration 4 without converging, Synthesis pauses to surface the remaining tension to the user or executes a strategic reset to `<base_anchor>`.
 - **Branch B - Convergence Achieved (`sublate_or_transcend.length === 0`)**:
   - Synthesis performs final curation (per the active lens, e.g. non-interactive git history curation) and runs final verification.
+  - Synthesis terminates all subagents spawned during the run (`manage_subagents` `kill` / `kill_all`) so idle subagents do not linger in conversation metadata or bleed across separate `/sublate` invocations.
   - Synthesis outputs `### STATUS: SUBLATED` and presents a concise summary of the triad's evolution.
 
 ---
