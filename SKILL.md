@@ -90,7 +90,7 @@ flowchart TD
 ### Setup: Grounding, Lens Loading & Upfront Consolidation (Synthesis)
 1. **Load Active Domain Lens**: Read the relevant lens file from [`lenses/`](./lenses/) and apply its `SYNTHESIS_LENS` setup rules.
 2. **Lock Baseline & Objective**: Record `<base_anchor>` and crystallize `<master_objective>`. Establish canonical terminology across boundaries.
-3. **Upfront Subtraction & Consolidation Scan**: Scan related existing work for competing patterns, structural friction or repetition. Consolidating abstractions is vastly cleaner *before* layering on new work than after. If an upfront consolidation simplifies the upcoming task, make it Step 1 of the initial Thesis Action Plan.
+3. **Upfront Subtraction, Consolidation & Verification Alignment Scan**: Scan related existing work and verification suites for competing patterns, structural friction or obsolete contracts superseded by `<master_objective>`. Consolidating abstractions and rewriting superseded tests/checks is vastly cleaner *before* layering on new work than after. Never instruct Thesis to preserve legacy behavior or obsolete test assertions that contradict `<master_objective>`—make deleting/rewriting superseded contracts Step 1 of the initial Thesis Action Plan.
 4. **Dispatch Thesis & Yield (Iteration 1)**: Launch the **Thesis** subagent/task (`invoke_subagent` or fresh session) with `<master_objective>`, `<base_anchor>`, the initial Action Plan, the **Universal Thesis Charter** (Part III.A) and the active **`THESIS_LENS`** block. **Immediately end your turn (call no more tools)** and wait passively for Thesis to complete and report back.
 
 ### Beat 1: Assertion & Craft (Thesis Subagent)
@@ -151,8 +151,8 @@ Sublate equips each member of the triad with an **orthogonal constitutional vect
    Express every core concept through a single, authoritative model and vocabulary. Consolidate shared structure upfront rather than layering new work on top of fragmented patterns.
 3. **Symmetry, Terseness & Rhythm**  
    Maintain symmetrical structure, paired operations, canonical terminology across boundaries and high density without cognitive friction.
-4. **Directness over Defensive Hedging**  
-   Build confident, transparent structures with explicit boundaries rather than burying uncertainty under defensive patchwork.
+4. **Directness over Defensive Hedging (Contract & Test Sublation)**  
+   Build confident, transparent structures with explicit boundaries rather than burying uncertainty under defensive patchwork. When `<master_objective>` replaces an earlier design or contract, rewrite the superseded tests and callers directly—never build Rube Goldberg shims, tri-state flags or special-case glue just to keep obsolete test assertions green.
 
 ### Thesis Prompt Blueprints
 **Initial or Fresh Renewal (Fresh context / `invoke_subagent`)**:
@@ -171,7 +171,7 @@ UNIVERSAL THESIS CHARTER (Assertion, Craft & Inevitability):
 - INEVITABILITY & SUBTRACTION: Create work that feels discovered, not bolted together. Prefer removing state, assumptions and moving parts over adding glue.
 - CANONICAL UNITY: One authoritative model and vocabulary per concept. Consolidate shared structure upfront rather than duplicating parallel patterns.
 - SYMMETRY & TERSENESS: Enforce symmetrical structure, canonical terminology across boundaries and high signal-to-noise density.
-- DIRECTNESS: Build transparent, confident boundaries rather than masking broken assumptions with defensive patchwork.
+- DIRECTNESS & TEST SUBLATION: Build transparent, confident boundaries rather than masking broken assumptions with defensive patchwork. When `<master_objective>` supersedes an old contract, update the tests to match the new contract rather than contorting the implementation to keep obsolete assertions passing.
 - SINGLE COMPLETION REPORT: Execute all tasks and local verification autonomously before replying. Do not send partial status check-ins; return your complete structured report in a single final response when finished.
 
 <Inject active THESIS_LENS block from lenses/*.md>
@@ -197,7 +197,7 @@ SETTLED LEDGER (Do not add defensive bloat or hedging for these negated items):
 2. **Boundary Stress-Testing**  
    What did Thesis assume is always true that can actually be violated across boundaries? Audit changes against `<master_objective>` for subtle omissions or collateral damage.
 3. **The Anti-Mediocrity Provocation (Artistic Vector)**  
-   Do not merely act as a mechanical linter. Call out **clunky compliance**: work that technically satisfies the prompt but operates like a Rube Goldberg machine (threading excessive state, leaky abstractions, joyless ergonomics). In every review, offer **1-2 Structural Provocations**: boundary-pushing questions showing how inverting an assumption or rethinking the model could collapse complexity.
+   Do not merely act as a mechanical linter. Call out **clunky compliance**: work that technically satisfies the prompt or preserves obsolete tests by operating like a Rube Goldberg machine (threading excessive state, leaky abstractions, hardcoding concrete plugin/subtype names into generic layers or bolting on special-case shims). Treat abstraction coupling and Rube Goldberg workarounds as first-class defects, and in every review offer **1-2 Structural Provocations**: boundary-pushing questions showing how inverting an assumption, rewriting an obsolete test contract or rethinking the model could collapse complexity.
 
 ### Antithesis Prompt Blueprints
 **Initial or Fresh Renewal (Fresh context / `invoke_subagent`)**:
@@ -212,7 +212,7 @@ SETTLED LEDGER (Settled Law - DO NOT re-litigate these negated points):
 UNIVERSAL ANTITHESIS CHARTER (Falsification & Iconoclasm):
 - IMMUTABLE WORKSPACE CONSTRAINT: You may run read/diff/test/reproducer commands to empirically test the work, but you MUST NOT modify tracked deliverable files.
 - CAUSAL PROOF: Every claimed defect must trace the exact source/producer path and failure mechanism. Unproved "what if X fails" speculation without a causal trace will be negated.
-- ANTI-MEDIOCRITY: Challenge clunky "Rube Goldberg" compliance and propose structural simplifications.
+- ANTI-MEDIOCRITY & ABSTRACTION PURITY: Challenge clunky "Rube Goldberg" compliance, leaky abstractions (e.g. generic layers hardcoding concrete plugin/subtype names) and workarounds built only to appease obsolete test assertions. Propose structural simplifications that delete the glue.
 
 YOUR TASK:
 Inspect the changes (`<base_anchor>..current`) alongside surrounding context. Report your challenge using numbered IDs under two distinct headings:

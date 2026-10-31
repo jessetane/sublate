@@ -6,12 +6,12 @@ This example lens plugs into **Sublate** ([`SKILL.md`](../SKILL.md)) whenever th
 
 ## 1. Core Engineering Principles (High → Low)
 
-1. **Minimal Mechanism (Design by Subtraction)** *(Problem Framing - Highest Level)*  
+1. **Minimal Mechanism & Abstraction Purity (Design by Subtraction)** *(Problem Framing - Highest Level)*  
    - *Question*: "Do we actually need this structure or can we reframe the model so the special case disappears?"  
-   - *Rule*: Keep the architecture generic and minimal. Do not bolt artificial flags, special cases or extra moving parts onto core machinery when a simpler primitive or boundary change makes the problem vanish.  
-2. **Single Source of Truth (One Canonical Way)** *(System Architecture)*  
-   - *Question*: "Why do we have two ways to do this? Why are there fallback layers?"  
-   - *Rule*: Enforce one canonical path for every operation and state item. Never introduce multi-tiered fallbacks, dual code paths or backwards-compatibility wrappers unless explicitly requested.  
+   - *Rule*: Keep the architecture generic, orthogonal and minimal. Do not bolt artificial flags, special cases or extra moving parts onto core machinery when a simpler primitive or boundary change makes the problem vanish. Generic layers (runners, engines, routers, UI) must never hardcode concrete plugin/subclass names or inspect subtype internals.  
+2. **Single Source of Truth & Clean Removal (One Canonical Way)** *(System Architecture)*  
+   - *Question*: "Why do we have two ways to do this? Why are there fallback layers or vestigial shims?"  
+   - *Rule*: Enforce one canonical path for every operation and state item. Never introduce multi-tiered fallbacks, dual code paths, deprecation warnings or backwards-compatibility wrappers unless explicitly requested. When a feature, flag or contract is removed or replaced, delete it completely—and rewrite superseded tests to match the new contract rather than contorting production code to keep obsolete assertions green.  
 3. **Pragmatic DRY & Upfront Consolidation** *(Module Structure & Refactoring)*  
    - *Question*: "Does this duplicate existing logic or introduce a competing pattern? Should we consolidate before layering on new work?"  
    - *Rule*: Treat repetition as a signal to consolidate shared abstractions upfront before layering on new features, balanced pragmatically against scope so you don't over-abstract trivial code.  
@@ -38,8 +38,8 @@ When dispatching subagents, Synthesis injects **only** the matching role block b
 
 ```text
 DOMAIN LENS: SOFTWARE ENGINEERING (THESIS - BUILDER)
-1. MINIMAL MECHANISM (#1): Keep the design generic and minimal. Do not bolt special-case flags onto core machinery when a simpler boundary or primitive eliminates the special case.
-2. SINGLE SOURCE OF TRUTH (#2): Implement one canonical path per operation. Never introduce multi-tiered fallbacks, dual code paths or backwards-compatibility shims unless explicitly requested.
+1. MINIMAL MECHANISM & ABSTRACTION PURITY (#1): Keep the design generic, orthogonal and minimal. Do not bolt special-case flags onto core machinery when a simpler boundary or primitive eliminates the special case. Generic layers (runners, engines, routers, UI) must never hardcode concrete plugin/subclass names or inspect subtype internals.
+2. SINGLE SOURCE OF TRUTH & CLEAN REMOVAL (#2): Implement one canonical path per operation. Never introduce multi-tiered fallbacks, dual code paths, deprecation warnings or backwards-compatibility shims unless explicitly requested. When a contract is replaced or a feature is removed, delete it completely and update superseded tests directly.
 3. UPFRONT DRY (#3): Consolidate shared abstractions upfront rather than copy-pasting parallel patterns.
 4. FIX THE PRODUCER (#4) & FAIL LOUD (#5): Never write consumer band-aids (`?.`, `?? ''`) or silent error swallowing (`catch (err) {}`). Validate at the boundary; let broken invariants fail visibly.
 5. SYMMETRY & TERSENESS (#6): Eliminate stuttering (`users.create()` not `users.createUser()`). Pair lifecycle verbs (`open`/`close`, `load`/`save`, `watch`/`unwatch`, `connect`/`disconnect`). Keep canonical nouns identical across DB, API and UI.
@@ -55,8 +55,8 @@ DOMAIN LENS: SOFTWARE ENGINEERING (THESIS - BUILDER)
 ```text
 DOMAIN LENS: SOFTWARE ENGINEERING (ANTITHESIS - RED-TEAM)
 1. EXECUTION & IMMUTABLE WORKSPACE: You have shell execution to run `git diff`, `git log`, test suites and non-destructive one-liner reproducers. You MUST NOT modify tracked files, commit or alter git history (unless running in an isolated branch workspace).
-2. CHALLENGE ARTIFICIAL COMPLEXITY (#1): Call out special-case flags, unnecessary state or clunky "Rube Goldberg" glue via Structural Provocations (`[P#]`) that show how a simpler mechanism makes the complexity vanish.
-3. COMPETING PATHS (#2, #3) & ANTI-MASKING (#5): Flag any fallback proliferation, duplicate code paths or swallowed errors (`catch (err) {}`) introduced by Thesis.
+2. CHALLENGE ARTIFICIAL COMPLEXITY & COUPLING (#1): Flag special-case flags, unnecessary state, leaky abstractions (e.g. generic runners/UI hardcoding concrete plugin/subclass names) or clunky "Rube Goldberg" shims built only to keep superseded tests green. Propose Structural Provocations (`[P#]`) or Falsifications (`[F#]`) that delete the glue and update the test contract.
+3. COMPETING PATHS, DEPRECATION BLOAT (#2, #3) & ANTI-MASKING (#5): Flag any fallback proliferation, duplicate code paths, unrequested deprecation warnings/wrappers for removed features or swallowed errors (`catch (err) {}`) introduced by Thesis.
 4. PRODUCER PROOF (#4 - MANDATORY EPISTEMIC CONSTRAINT): You are FORBIDDEN from demanding a null check, `?.` or defensive guard on a consumer unless you trace and cite the exact PRODUCER code path (`file:line`) or upstream package capable of emitting that invalid state. Unproved "what if X is undefined" nitpicks will be negated.
 5. ASYMMETRY & STYLE DRIFT (#6, #7): Flag asymmetrical lifecycle verbs, stuttering method names, terminology drift across layers or unnecessary third-party dependencies where native platform features suffice.
 ```
@@ -65,7 +65,8 @@ DOMAIN LENS: SOFTWARE ENGINEERING (ANTITHESIS - RED-TEAM)
 
 Synthesis applies these rules during **Setup** and **Beat 3**:
 
-- **Minimal Mechanism & Upfront Consolidation Scan (#1, #3 at Setup)**: Before dispatching Thesis Iteration 1, scan target files for competing patterns or artificial complexity. If an upfront consolidation simplifies the upcoming feature, make it Step 1 of Thesis's initial Action Plan.  
+- **Minimal Mechanism, Upfront Consolidation & Test Sublation Scan (#1, #2, #3 at Setup)**: Before dispatching Thesis Iteration 1, scan target files and test suites for competing patterns, artificial complexity or obsolete test assertions that contradict `<master_objective>`. Make deleting/rewriting superseded contracts and consolidating shared abstractions Step 1 of Thesis's initial Action Plan.  
+- **Reject Coupling & Vestigial Shims (#1, #2 at Beat 3)**: Never approve patches that hardcode concrete plugin/subclass names into generic layers, add unrequested deprecation warnings or bolt on special-case flags to appease legacy tests. Issue a `[TRANSCEND]` directive to delete the coupling and align the tests.  
 - **Fix the Producer / Externalize Upstream (#4 at Beat 3)**: When Antithesis proves a state bug, never instruct Thesis to add a consumer band-aid (`?.`). Issue a `[SUBLATE]` directive targeting the **producer** inside the repo or `[EXTERNALIZE]` if the bug originates in an upstream library/package.  
 - **Real-World Blast Radius Filter (#5 at Beat 3)**: `[NEGATE]` theoretical 0%-probability edge cases, unproved producer paths and pedantic nitpicks that would scar the code with defensive bloat.  
 
