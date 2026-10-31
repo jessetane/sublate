@@ -1,26 +1,29 @@
 # sublate
+
 Hegelian dialectic workflow for agents: *Thesis → Antithesis → Synthesis*.
 
 ## Why
-After defining an objective, I frequently find myself traversing this loop by hand (often 3-5 iterations): spawn an agent to build, spawn another to tear it apart, triage the findings and repeat until convergence.
 
-`sublate` (from Hegel's *Aufheben*: to simultaneously *cancel*, *preserve* and *elevate*) operationalizes this loop into an autonomous triad with pluggable domain lenses.
+After defining an objective, I frequently find myself running this loop by hand (often 3–5 iterations): spawn an agent to build, spawn another to tear it apart, triage the findings and repeat until convergence.
+
+`sublate` (from Hegel's *Aufheben*: to simultaneously *cancel*, *preserve* and *elevate*) automates that loop into a domain-agnostic triad with pluggable lenses.
 
 ## How
-* **Thesis (Builder)**: Creates or refactors the deliverable in its cleanest, most direct form (`self`).  
-* **Antithesis (Red-Team)**: Stress-tests the work via read-only inspection and empirical checks (`self`, read/exec only) across two channels:
-  * **Falsifications (`[F#]`)**: Concrete defects, broken invariants or physical clashes. Must trace the **upstream source/producer** (e.g. the originating code path or base CAD sketch/placement) rather than demanding downstream band-aids.  
-  * **Structural Provocations (`[P#]`)**: Holistic architectural and design critiques that challenge clunky "Rube Goldberg" compliance and propose simpler models.  
-* **Synthesis (Arbiter)**: Adjudicates each finding by real-world blast radius, rejects downstream band-aids in favor of upstream root-cause fixes, records rejected nitpicks into a **Settled Ledger** so they aren't re-litigated and decides whether the next pass should reuse the warm subagent (`send_message`) or spawn a fresh one (`invoke_subagent`).  
-* **Domain Lenses**: Pluggable role-specific rubrics (`THESIS_LENS`, `ANTITHESIS_LENS`, `SYNTHESIS_LENS`) in [`lenses/`](./lenses/) that adapt [`SKILL.md`](./SKILL.md) to the target domain (e.g. git diffs, unit tests and `file:line` traces for software vs. B-Rep solid validation, clash volumes and sketch/datum traces for CAD/BIM).  
+
+* **Thesis (Build)**: Creates or refactors the deliverable in its cleanest, most direct form.  
+* **Antithesis (Stress-Test)**: Challenges the work via read-only inspection and empirical checks across two channels:  
+  * **Falsifications (`[F#]`)**: Concrete defects, broken invariants or contract drift—each required to trace the **upstream source/producer** rather than demanding downstream band-aids.  
+  * **Structural Provocations (`[P#]`)**: Design critiques that call out clunky "Rube Goldberg" compliance and propose simpler models.  
+* **Synthesis (Elevate)**: Adjudicates every finding by real-world blast radius, directs upstream root-cause fixes, records rejected nitpicks into a **Settled Ledger** so they are never re-litigated and chooses whether the next pass should reuse the warm subagent (`send_message`) or spawn a fresh one (`invoke_subagent`).  
+* **Domain Lenses**: Pluggable domain rubrics in [`lenses/`](./lenses/) pairing shared domain principles with role-specific dynamics.  
 
 ```mermaid
 flowchart TD
-    Start(["Task / Master Objective"]) --> Setup["Setup: Load Lens & Lock Baseline"]
+    Start(["Master Objective"]) --> Setup["Setup: Load Lenses, Lock Baseline & Scan"]
     Setup --> Thesis["THESIS (Build)"]
 
-    subgraph SublateLoop ["The Sublate Loop"]
-        Thesis -->|"Delta + Baseline Anchor"| Antithesis["ANTITHESIS (Stress-Test)"]
+    subgraph Loop ["The Sublate Loop"]
+        Thesis -->|"Delta + Baseline"| Antithesis["ANTITHESIS (Stress-Test)"]
         Antithesis -->|"Falsifications [F#] & Provocations [P#]"| Synthesis{"SYNTHESIS (Adjudicate)"}
         Synthesis -->|"[SUBLATE] / [TRANSCEND] + Settled Ledger"| Thesis
     end
@@ -30,10 +33,11 @@ flowchart TD
 ```
 
 ### Synthesis Verdicts
-* **`[SUBLATE]`**: Valid flaw or contract drift (`[F#]`); fix the upstream root cause cleanly without downstream band-aids.  
-* **`[TRANSCEND]`**: Valid structural provocation (`[P#]`); collapse complexity by rethinking the model or architecture.  
+
+* **`[SUBLATE]`**: Valid defect or drift (`[F#]`); fix the upstream root cause cleanly without downstream band-aids.  
+* **`[TRANSCEND]`**: Valid structural critique (`[P#]`); collapse complexity by rethinking the model.  
 * **`[NEGATE]`**: 0%-probability edge case or unproved causal path; recorded into the **Settled Ledger** as settled law.  
-* **`[EXTERNALIZE]`**: Issue belongs in an upstream dependency or external boundary.  
+* **`[EXTERNALIZE]`**: Issue belongs in an external dependency or upstream boundary outside scope.  
 
 > [!IMPORTANT]
 > Synthesis is always the terminal actor. A run never ends directly after a Thesis pass; it finishes only when an Antithesis + Synthesis audit cycle produces zero active `[SUBLATE]` or `[TRANSCEND]` directives.
@@ -42,17 +46,18 @@ flowchart TD
 
 ```text
 sublate/
-├── SKILL.md                      # Dialectic engine, role charters & prompt blueprints
+├── SKILL.md                 # Universal dialectic engine & role mandates
 └── lenses/
-    ├── software-engineering.md   # Example lens for code & systems architecture
-    └── cad-bim.md                # Example lens for parametric CAD & OpenBIM (FreeCAD)
+    ├── software.md          # Code, refactoring & systems architecture
+    ├── legal.md             # Commercial contracts & legal agreements
+    └── bim-freecad.md       # Parametric CAD & OpenBIM in FreeCAD
 ```
 
-The built-in files in [`lenses/`](./lenses/) are examples distilled from my personal conversation history, you should bring your own:
+The built-in files in [`lenses/`](./lenses/) are examples—bring or customize your own:
 
-* **Customize globally**: Edit the examples in [`lenses/`](./lenses/) or add new `<name>.md` files to encode your own taste and stack.  
-* **Per-repo `.sublate.md`**: Drop a `.sublate.md` in any repo root to append project-specific rules onto the base lens (or define `THESIS_LENS` / `ANTITHESIS_LENS` / `SYNTHESIS_LENS` blocks to replace it).  
-* **Select per run**: Synthesis auto-detects the lens from the task or you can pass `--lens <name|path>` in the prompt.  
+* **Customize globally**: Edit [`lenses/`](./lenses/) or add new `<name>.md` files to encode your own domain standards.  
+* **Per-workspace `.sublate.md`**: Drop a `.sublate.md` in any workspace root to layer project-specific rules onto the active lens (or set `mode: replace` to use it standalone).  
+* **Select or compose per run**: Synthesis auto-selects matching lens(es) from [`lenses/`](./lenses/), or you can pass `--lens <name|path>` (comma-separated to combine multiple).  
 * **Per-role models**: Subagents default to `inherit` or can be overridden per role in the prompt.  
 
 ## Install
@@ -70,19 +75,20 @@ $ git clone https://github.com/jessetane/sublate.git ~/.claude/skills/sublate
 ```
 
 ### Cursor / Windsurf / Codex / Other Platforms
-Sublate adheres to the open [Agent Skills](https://agentskills.io) specification. For platforms without automatic skill discovery:
-* Place the repo in your workspace or prompt rules directory (e.g. `.cursorrules`, `.windsurfrules` or project instructions).
-* Reference [`SKILL.md`](./SKILL.md) in your initial prompt to instruct the agent to run as **Synthesis** or use the prompt blueprints in Part III directly across separate chat threads/tabs.
+Place the repo in your workspace or rules directory and reference [`SKILL.md`](./SKILL.md) to run the triad.
 
 ## Usage
 ```text
-# Default (auto-detects software-engineering or cad-bim from task)
+# Auto-detects matching lens from task
 /sublate unify watcher lifecycle and remove duplicate event emitters
 
-# Parametric CAD / OpenBIM in FreeCAD
-/sublate --lens cad-bim frame the south wall and ledger assembly from global-vars
+# Legal contract drafting / review
+/sublate --lens legal tighten the indemnity and limitation of liability clauses in msa.md
 
-# Custom lens file or per-role model overrides
+# Parametric CAD / OpenBIM in FreeCAD
+/sublate --lens bim-freecad frame the south wall and ledger assembly from global-vars
+
+# Custom lens or per-role model overrides
 /sublate --lens ./docs/security-lens.md harden the token verification boundary
 /sublate with flash for thesis and pro for antithesis: refactor the query planner
 ```
