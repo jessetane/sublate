@@ -23,7 +23,7 @@ Example domain lens for code, refactoring and systems architecture.
 ### Antithesis
 
 - Use shell execution to inspect `git diff`, `git log`, test suites and non-destructive one-liner reproducers; never modify tracked files or git history.  
-- On continuity turns, inspect the iteration delta (`git diff <last_reviewed_state>..HEAD`) first, then audit the cumulative diff (`git diff <base_anchor>..HEAD`) for cross-iteration regressions or dead scaffolding.  
+- Evaluate broad architectural strokes (`git diff <base_anchor>..HEAD` and surrounding module boundaries) first, then zoom into the iteration delta (`git diff <last_reviewed_state>..HEAD`) for local defects and regressions.  
 - Cite exact `file:line` producer paths (or upstream package boundaries) for every `[F#]`.  
 
 ### Synthesis

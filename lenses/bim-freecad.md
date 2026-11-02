@@ -22,7 +22,7 @@ Example domain lens for parametric 3D modeling, architectural/structural design,
 ### Antithesis
 
 - Run read-only inspection queries (`execute_code` with `include_screenshot=False`, `get_objects`, `get_view` or isolated checks on a temporary copy) without mutating or saving over the active `.FCStd` deliverable.  
-- On continuity turns, inspect newly modified objects (`<last_reviewed_state>..current`) first, then verify full-assembly solid validity, clearances and `ExpressionEngine` bindings against `<base_anchor>`.  
+- Evaluate whole-assembly topology, datum hierarchy and `ExpressionEngine` bindings (`<base_anchor>..current`) first, then zoom into newly modified objects (`<last_reviewed_state>..current`) for solid validity and clearances.  
 - Cite exact `Object.Name` (`Label`), world coordinates, clash volume (mm³) and the upstream sketch constraint or placement formula responsible for every `[F#]`.  
 
 ### Synthesis

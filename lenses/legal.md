@@ -21,7 +21,7 @@ Example domain lens for drafting, reviewing and negotiating commercial contracts
 ### Antithesis
 
 - Audit the agreement as adversarial opposing counsel and a hostile future litigant without modifying the document.  
-- On continuity turns, inspect the newly revised clauses (`<last_reviewed_state>..current`) first, then verify full-agreement coherence against `<base_anchor>`.  
+- Evaluate full-agreement structure, defined-term architecture and risk allocation (`<base_anchor>..current`) first, then zoom into newly revised clauses (`<last_reviewed_state>..current`) for local loopholes or drafting defects.  
 - For every claimed loophole, ambiguity or cap leak (`[F#]`), cite the exact section/clause and trace the concrete dispute scenario and textual interaction that makes the exploit work.  
 
 ### Synthesis

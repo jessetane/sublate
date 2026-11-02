@@ -11,21 +11,22 @@ After defining an objective, I frequently find myself running this loop by hand 
 ## How
 
 * **Thesis (Build)**: Creates or refactors the deliverable in its cleanest, most direct form.  
-* **Antithesis (Stress-Test)**: Challenges the work via read-only inspection and empirical checks across two channels:  
+* **Antithesis (Stress-Test)**: Challenges the work via read-only inspection and empirical checks, moving from broad architectural strokes to minute detail:  
+  * **Structural Provocations (`[P#]`)**: Whole-system design critiques that call out clunky "Rube Goldberg" machinery, split state or leaky boundaries and propose simpler models before nitpicking line-level bugs inside flawed structures.  
   * **Falsifications (`[F#]`)**: Concrete defects, broken invariants or contract drift—each required to trace the **upstream source/producer** rather than demanding downstream band-aids.  
-  * **Structural Provocations (`[P#]`)**: Design critiques that call out clunky "Rube Goldberg" compliance and propose simpler models.  
-* **Synthesis (Elevate)**: Adjudicates every finding by real-world blast radius, directs upstream root-cause fixes, records rejected nitpicks into a **Settled Ledger** so they are never re-litigated and chooses whether the next pass should reuse the warm subagent (`send_message`) or spawn a fresh one (`invoke_subagent`).  
+* **Synthesis (Elevate)**: Inspects contested areas directly between beats, collapses related defects into cohesive top-down architectural blueprints (**structural refactors & consolidations first → local bug fixes second**), records rejected nitpicks into a **Settled Ledger** so they are never re-litigated and routes each pass via warm continuity (`send_message`) or fresh renewal (`invoke_subagent`).  
 * **Domain Lenses**: Pluggable domain rubrics in [`lenses/`](./lenses/) pairing shared domain principles with role-specific dynamics.  
 
 ```mermaid
 flowchart TD
-    Start(["Master Objective"]) --> Setup["Setup: Load Lenses, Lock Baseline & Scan"]
-    Setup --> Thesis["THESIS (Build)"]
+    Start(["Master Objective"]) --> Setup["Setup: Load Lenses, Lock Baseline & Frame"]
+    Setup -->|"Build / Refactor"| Thesis["THESIS (Build)"]
+    Setup -->|"Review / Audit"| Antithesis["ANTITHESIS (Stress-Test)"]
 
     subgraph Loop ["The Sublate Loop"]
-        Thesis -->|"Delta + Baseline"| Antithesis["ANTITHESIS (Stress-Test)"]
-        Antithesis -->|"Falsifications [F#] & Provocations [P#]"| Synthesis{"SYNTHESIS (Adjudicate)"}
-        Synthesis -->|"[SUBLATE] / [TRANSCEND] + Settled Ledger"| Thesis
+        Thesis -->|"Delta + Baseline"| Antithesis
+        Antithesis -->|"Provocations [P#] & Falsifications [F#]"| Synthesis{"SYNTHESIS (Inspect, Elevate & Adjudicate)"}
+        Synthesis -->|"[TRANSCEND] / [SUBLATE] + Settled Ledger"| Thesis
     end
 
     Synthesis -->|"Zero Active Directives"| Curate["Curate & Verify"]
@@ -34,8 +35,8 @@ flowchart TD
 
 ### Synthesis Verdicts
 
+* **`[TRANSCEND]`**: Valid structural critique (`[P#]`) or defect cluster rooted in a flawed boundary; collapse complexity by rethinking the model.  
 * **`[SUBLATE]`**: Valid defect or drift (`[F#]`); fix the upstream root cause cleanly without downstream band-aids.  
-* **`[TRANSCEND]`**: Valid structural critique (`[P#]`); collapse complexity by rethinking the model.  
 * **`[NEGATE]`**: 0%-probability edge case or unproved causal path; recorded into the **Settled Ledger** as settled law.  
 * **`[EXTERNALIZE]`**: Issue belongs in an external dependency or upstream boundary outside scope.  
 
