@@ -5,7 +5,7 @@ Example domain lens for code, refactoring and systems architecture.
 ## Shared Principles (High → Low)
 
 1. **Minimal Mechanism & Abstraction Purity**: Keep architecture generic, orthogonal and minimal. Do not bolt special-case flags or extra moving parts onto core machinery when a simpler primitive or boundary change makes the problem vanish. Generic layers (runners, engines, routers, UI) must never hardcode concrete plugin/subclass names or inspect subtype internals.
-2. **Single Source of Truth & Clean Removal**: Enforce one canonical path for every operation and piece of state. Never introduce multi-tiered fallbacks, dual code paths, deprecation warnings or backwards-compatibility shims unless explicitly requested. When a design or contract changes, update or delete superseded tests *before* implementing the new code so obsolete assertions never contort the implementation.
+2. **Single Source of Truth & Clean Removal**: Enforce one canonical path for every operation and piece of state. Never introduce multi-tiered fallbacks, dual code paths, deprecation warnings or backwards-compatibility shims unless explicitly requested.
 3. **Pragmatic DRY & Upfront Consolidation**: Treat repetition or competing patterns as a signal to consolidate shared abstractions upfront before layering on new features, balanced pragmatically against scope.
 4. **Fix the Producer, Not the Consumer**: Never slap defensive band-aids (`?.`, `?? ''`, downstream workarounds) onto consumers to mask an upstream bug. Trace the bad state to its origin and fix the producer (or isolate at the external boundary).
 5. **Fail Loud & Never Guess**: Never swallow exceptions (`catch (err) {}`), mask broken invariants with silent fallbacks or guess when state is missing or ambiguous (e.g. heuristic `a || b || 'default'` chains, silent coercion or magic defaults that hide upstream bugs as mysterious downstream artifacts). Let errors and violated contracts fail visibly at the boundary, and ignore theoretical 0%-probability edge cases with no real-world blast radius.
@@ -16,14 +16,14 @@ Example domain lens for code, refactoring and systems architecture.
 
 ### Thesis
 
-- **Test-First (TDD)**: Modify `test/*` *before* touching production files: delete tests coupled to obsolete internal seams or out-of-band state mutations, write tests asserting the target contract, confirm they fail against the old code, and then implement by subtraction until green.  
+- **High-Level Behavioral Testing**: Test observable behavior and integration contracts at public boundaries rather than writing brittle white-box unit tests coupled to internal helpers or private state that break whenever the design evolves. When changing or retiring a contract, delete or update superseded tests *first* so legacy assertions never pressure you into keeping dead hooks or shims.  
 - Commit logically contiguous milestones using lowercased, topic-prefixed messages (e.g. `core: unify watcher lifecycle`).  
-- In your report, include commit range (`<start>..<head>`), touched files, and separate production vs. test diff stats (`git diff --stat <start>..<head> -- ':!test/*'`) under `CHANGES`, test commands/results under `VERIFICATION`, and architectural choices under `KEY_DECISIONS`.  
+- In your report, include commit range (`<start>..<head>`), touched files, and separate production vs. test diff stats under `CHANGES`, test commands/results under `VERIFICATION`, and architectural choices under `KEY_DECISIONS`.  
 
 ### Antithesis
 
 - Use shell execution to inspect `git diff`, `git log`, test suites and non-destructive one-liner reproducers; never modify tracked files or git history.  
-- Evaluate broad architectural strokes (`git diff <base_anchor>..HEAD` and `git diff --stat <base_anchor>..HEAD -- ':!test/*'`) first, then zoom into the iteration delta (`git diff <last_reviewed_state>..HEAD`). Flag `[P#]` if a refactoring left legacy hooks/fallbacks intact, duplicated logic, or kept defensive shims just to appease white-box tests.  
+- Evaluate broad architectural strokes (`git diff <base_anchor>..HEAD` and production-only diff stats excluding test files) first, then zoom into the iteration delta (`git diff <last_reviewed_state>..HEAD`). Flag `[P#]` for over-engineered abstractions, split state, incomplete subtraction (legacy hooks/fallbacks left behind) or defensive shims and brittle white-box tests coupled to internal seams.  
 - Cite exact `file:line` producer paths (or upstream package boundaries) for every `[F#]`.  
 
 ### Synthesis

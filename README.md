@@ -12,9 +12,9 @@ After defining an objective, I frequently find myself running this loop by hand 
 
 * **Thesis (Build)**: Creates or refactors the deliverable in its cleanest, most direct form.  
 * **Antithesis (Stress-Test)**: Challenges the work via read-only inspection and empirical checks, moving from broad architectural strokes to minute detail:  
-  * **Structural Provocations (`[P#]`)**: Whole-system design critiques that call out clunky "Rube Goldberg" machinery, split state or leaky boundaries and propose simpler models before nitpicking line-level bugs inside flawed structures.  
+  * **Structural Provocations (`[P#]`)**: Whole-system design critiques that call out over-engineered "Rube Goldberg" machinery, split state, leaky boundaries or incomplete subtraction and propose simpler models before nitpicking line-level bugs inside flawed structures.  
   * **Falsifications (`[F#]`)**: Concrete defects, broken invariants or contract drift—each required to trace the **upstream source/producer** rather than demanding downstream band-aids.  
-* **Synthesis (Elevate)**: Inspects contested areas directly between beats, collapses related defects into cohesive top-down architectural blueprints (**structural refactors & consolidations first → local bug fixes second**), records rejected nitpicks into a **Settled Ledger** so they are never re-litigated and routes each pass via warm continuity (`send_message`) or fresh renewal (`invoke_subagent`).  
+* **Synthesis (Elevate)**: Inspects contested areas directly between beats, collapses related defects into cohesive top-down architectural blueprints (**structural redesigns, deletions & consolidations first → local fixes second**), records rejected nitpicks into a **Settled Ledger** so they are never re-litigated and routes each pass via warm continuity (`send_message`) or fresh renewal (`invoke_subagent`).  
 * **Domain Lenses**: Pluggable domain rubrics in [`lenses/`](./lenses/) pairing shared domain principles with role-specific dynamics.  
 
 ```mermaid

@@ -32,7 +32,7 @@ flowchart TD
 1. **Resolve Lenses**: Load any lens(es) specified via `--lens <name|path>` (comma-separated if multiple) or requested in natural language from [`lenses/`](./lenses/); otherwise auto-select the matching lens(es) from [`lenses/`](./lenses/) based on the task domain. If `.sublate.md` exists in the workspace root, layer its rules on top of the active lens (or use it standalone if it sets `mode: replace`).
 2. **Lock Objective & Baseline**: Crystallize `<master_objective>` (clarifying with the user first if ambiguous) and record the immutable starting state `<base_anchor>` per the active lens.
 3. **Frame & Route Entry Beat**:
-   - **Build / Refactor (→ Thesis)**: Inspect target deliverables and verification checks for competing patterns or obsolete contracts superseded by `<master_objective>`. Make consolidating shared structure and updating or removing superseded verification checks Step 1 of Thesis's initial plan—*before* new implementation—so obsolete checks never contort the new design.
+   - **Build / Refactor (→ Thesis)**: Frame Thesis's initial plan around the canonical model and boundaries first. When evolving existing work, inspect target deliverables for competing patterns or superseded contracts and make consolidating shared structure and retiring or updating superseded artifacts Step 1—*before* layering on new work—so legacy expectations never contort the design.
    - **Review / Audit (→ Antithesis)**: When `<master_objective>` is to review, audit or stress-test existing work (or when the user asks to start with Antithesis), dispatch Antithesis first against `<base_anchor>` so Synthesis can architect the structural response before Thesis touches a file.
 
 ## 2. Universal Role Mandates
@@ -42,22 +42,22 @@ Pass the shared domain principles and matching role dynamics from the active len
 ### Thesis (Build)
 
 - **Economy & Subtraction**: Solve problems by removing assumptions, state and moving parts rather than adding glue. Work should feel designed, not bolted together.  
-- **Canonical Unity**: Express each concept through one authoritative model and vocabulary across boundaries. Consolidate shared structure upfront.  
-- **Directness & Zero Guessing**: Build transparent boundaries rather than defensive patchwork. Never guess or invent "helpful" heuristic fallbacks, silent coercions or magic defaults when state or requirements are missing or ambiguous—enforce explicit contracts. When `<master_objective>` changes a design or contract, update or delete superseded checks and dependents *before* implementing the new work rather than contorting the build to keep obsolete expectations passing.  
+- **Canonical Unity**: Express each concept through one authoritative model and vocabulary across boundaries. Consolidate shared structure upfront, and when evolving a design, retire or update superseded artifacts and dependents first rather than contorting the new work to appease obsolete expectations.  
+- **Directness & Zero Guessing**: Build transparent boundaries rather than defensive patchwork. Never guess or invent "helpful" heuristic fallbacks, silent coercions or magic defaults when state or requirements are missing or ambiguous—enforce explicit contracts.  
 - **Structured Report**: Return `CHANGES`, `VERIFICATION` and `KEY_DECISIONS` (specialized per the active lens).  
 
 ### Antithesis (Stress-Test)
 
 - **Immutable Workspace**: Inspect and run non-destructive checks or reproducers empirically, but never modify deliverables.  
 - **Macro Before Micro**: Evaluate broad architectural strokes first (`<base_anchor>..current` and surrounding system structure), then minute detail (`<last_reviewed_state>..current`):  
-  1. **Structural Provocations (`[P1]..[Pn]`)**: Challenge clunky "Rube Goldberg" machinery, incomplete subtraction, split or duplicated state, leaky abstractions and workarounds built to appease obsolete expectations. When a mechanism has the wrong shape or shouldn't exist, flag the structural critique (`[P#]`) so it is redesigned or deleted rather than filing line-level bug reports inside it.  
+  1. **Structural Provocations (`[P1]..[Pn]`)**: Challenge over-engineered "Rube Goldberg" machinery, premature or leaky abstractions, split or duplicated state, incomplete subtraction and workarounds built to appease obsolete expectations. When a mechanism has the wrong shape or shouldn't exist, flag the structural critique (`[P#]`) so it is redesigned or deleted rather than filing line-level bug reports inside it.  
   2. **Falsifications (`[F1]..[Fn]`) with Causal Proof**: Where the structure is sound, hunt for concrete defects, broken invariants, silent heuristic guesses/fallbacks, unhandled failure modes and contract drift against `<master_objective>`. Every `[F#]` must trace and cite the exact upstream source/producer path capable of causing the failure; unproved "what if" speculation will be negated.  
 - **Settled Law**: Never re-litigate items recorded in the **Settled Ledger**.  
 
 ### Synthesis (Inspect, Elevate & Adjudicate)
 
 - **Terminal Invariant**: Synthesis is always the terminal actor. A run never ends directly after a Thesis pass; every Thesis change must pass through Antithesis and Synthesis.  
-- **Active Architectural Stewardship**: Between Antithesis and Thesis, inspect contested deliverables directly to see the true shape of the system. Do not merely forward Antithesis's complaints—ask whether multiple `[F#]` defects are symptoms of a deeper structural seam that a single `[TRANSCEND]` redesign eliminates, and hand Thesis a cohesive top-down plan (**structural refactors, deletions and consolidations first → local bug fixes second**). Never let iterative review degrade a clean design into defensive patchwork.  
+- **Active Architectural Stewardship**: Between Antithesis and Thesis, inspect contested deliverables directly to see the true shape of the system. Do not merely forward Antithesis's complaints—ask whether multiple `[F#]` defects are symptoms of a deeper structural seam that a single `[TRANSCEND]` redesign eliminates, and hand Thesis a cohesive top-down plan (**structural redesigns, deletions and consolidations first → local fixes second**). Never let iterative review degrade a clean design into defensive patchwork.  
 - **Four Verdicts**: Adjudicate every `[P#]` and `[F#]` from Antithesis:  
   - `[TRANSCEND]`: Valid structural critique (`[P#]`) or cluster of defects rooted in a flawed boundary. Authorize replacing clunky machinery with the simpler model.  
   - `[SUBLATE]`: Real defect or drift (`[F#]`). Direct an upstream root-cause fix without downstream band-aids.  
