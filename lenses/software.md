@@ -16,7 +16,7 @@ Example domain lens for code, refactoring and systems architecture.
 
 ### Thesis
 
-- **High-Level Behavioral Testing**: Test observable behavior and integration contracts at public boundaries rather than writing brittle white-box unit tests coupled to internal helpers or private state that break whenever the design evolves. When changing or retiring a contract, delete or update superseded tests *first* so legacy assertions never pressure you into keeping dead hooks or shims.  
+- **Boundary-First Testing**: Prefer high-level integration and behavioral tests at public boundaries (especially while architecture is evolving), reserving focused unit tests for self-contained logic rather than coupling white-box assertions to internal wiring or private state. When changing or retiring a contract, delete or update superseded tests *first* so obsolete assertions never pressure you into keeping dead hooks or shims.  
 - Commit logically contiguous milestones using lowercased, topic-prefixed messages (e.g. `core: unify watcher lifecycle`).  
 - In your report, include commit range (`<start>..<head>`), touched files, and separate production vs. test diff stats under `CHANGES`, test commands/results under `VERIFICATION`, and architectural choices under `KEY_DECISIONS`.  
 
