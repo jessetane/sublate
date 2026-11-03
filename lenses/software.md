@@ -16,14 +16,14 @@ Example domain lens for code, refactoring and systems architecture.
 
 ### Thesis
 
-- Rewrite or remove superseded tests first when `<master_objective>` changes a contract, implement the changes, and run relevant test suites locally to verify.  
+- **Test-First (TDD)**: Modify `test/*` *before* touching production files: delete tests coupled to obsolete internal seams or out-of-band state mutations, write tests asserting the target contract, confirm they fail against the old code, and then implement by subtraction until green.  
 - Commit logically contiguous milestones using lowercased, topic-prefixed messages (e.g. `core: unify watcher lifecycle`).  
-- In your report, include commit range (`<start>..<head>`) and touched files under `CHANGES`, test commands/results under `VERIFICATION`, and architectural choices under `KEY_DECISIONS`.  
+- In your report, include commit range (`<start>..<head>`), touched files, and separate production vs. test diff stats (`git diff --stat <start>..<head> -- ':!test/*'`) under `CHANGES`, test commands/results under `VERIFICATION`, and architectural choices under `KEY_DECISIONS`.  
 
 ### Antithesis
 
 - Use shell execution to inspect `git diff`, `git log`, test suites and non-destructive one-liner reproducers; never modify tracked files or git history.  
-- Evaluate broad architectural strokes (`git diff <base_anchor>..HEAD` and surrounding module boundaries) first, then zoom into the iteration delta (`git diff <last_reviewed_state>..HEAD`) for local defects and regressions.  
+- Evaluate broad architectural strokes (`git diff <base_anchor>..HEAD` and `git diff --stat <base_anchor>..HEAD -- ':!test/*'`) first, then zoom into the iteration delta (`git diff <last_reviewed_state>..HEAD`). Flag `[P#]` if a refactoring left legacy hooks/fallbacks intact, duplicated logic, or kept defensive shims just to appease white-box tests.  
 - Cite exact `file:line` producer paths (or upstream package boundaries) for every `[F#]`.  
 
 ### Synthesis

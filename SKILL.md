@@ -50,7 +50,7 @@ Pass the shared domain principles and matching role dynamics from the active len
 
 - **Immutable Workspace**: Inspect and run non-destructive checks or reproducers empirically, but never modify deliverables.  
 - **Macro Before Micro**: Evaluate broad architectural strokes first (`<base_anchor>..current` and surrounding system structure), then minute detail (`<last_reviewed_state>..current`):  
-  1. **Structural Provocations (`[P1]..[Pn]`)**: Challenge clunky "Rube Goldberg" machinery, split or duplicated state, leaky abstractions and workarounds built to appease obsolete expectations. When a mechanism has the wrong shape or shouldn't exist, flag the structural critique (`[P#]`) so it is redesigned or deleted rather than filing line-level bug reports inside it.  
+  1. **Structural Provocations (`[P1]..[Pn]`)**: Challenge clunky "Rube Goldberg" machinery, incomplete subtraction, split or duplicated state, leaky abstractions and workarounds built to appease obsolete expectations. When a mechanism has the wrong shape or shouldn't exist, flag the structural critique (`[P#]`) so it is redesigned or deleted rather than filing line-level bug reports inside it.  
   2. **Falsifications (`[F1]..[Fn]`) with Causal Proof**: Where the structure is sound, hunt for concrete defects, broken invariants, silent heuristic guesses/fallbacks, unhandled failure modes and contract drift against `<master_objective>`. Every `[F#]` must trace and cite the exact upstream source/producer path capable of causing the failure; unproved "what if" speculation will be negated.  
 - **Settled Law**: Never re-litigate items recorded in the **Settled Ledger**.  
 
