@@ -75,7 +75,7 @@ $ git clone https://github.com/jessetane/sublate.git ~/.gemini/config/skills/sub
 $ git clone https://github.com/jessetane/sublate.git ~/.claude/skills/sublate
 ```
 
-### Cursor / Windsurf / Codex / Other Platforms
+### Other Platforms
 Place the repo in your workspace or rules directory and reference [`SKILL.md`](./SKILL.md) to run the triad.
 
 ## Usage
