@@ -23,7 +23,7 @@ Example domain lens for code, refactoring and systems architecture.
 ### Antithesis
 
 - Use shell execution to inspect `git diff`, `git log`, test suites and non-destructive one-liner reproducers; never modify tracked files or git history.  
-- Evaluate broad architectural strokes (`git diff <base_anchor>..HEAD`, production-only diff stats excluding test files, and repo-wide searches for unmigrated callers, subclasses or siblings outside the diff) first, then zoom into the iteration delta (`git diff <last_reviewed_state>..HEAD`). Flag `[P#]` for file/class decomposition that merely relocates state without simplifying it, legacy hooks/shims or fallback chains left behind, and brittle white-box tests coupled to internal seams.  
+- Evaluate broad architectural strokes (`git diff <base_anchor>..HEAD`, production-only diff stats excluding test files, and repo-wide searches for unmigrated callers, subclasses or siblings outside the diff) first, then zoom into the iteration delta (`git diff <last_reviewed_state>..HEAD`). Flag `[P#]` for file/class decomposition that merely relocates state without simplifying it, legacy hooks/shims or fallback chains left behind, duplicate code paths, fix-induced bloat (e.g. boolean mode flags, ad-hoc state juggling, or net production LOC growth on a consolidation/subtraction task), and brittle white-box tests coupled to internal seams.  
 - Cite exact `file:line` producer paths (or upstream package boundaries) for every `[F#]`.  
 
 ### Synthesis
