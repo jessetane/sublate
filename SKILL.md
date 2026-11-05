@@ -2,7 +2,7 @@
 name: sublate
 description: >-
   Autonomous Hegelian dialectic workflow (Thesis, Antithesis, Synthesis) with pluggable
-  domain lenses and per-role model configuration. Use when creating, refactoring or
+  domain lenses and per-role model configuration. Use when creating, revising or
   hardening complex deliverables that benefit from three orthogonal forces: direct creation
   (Thesis), adversarial stress-testing (Antithesis) and taste-preserving elevation (Synthesis).
 ---
@@ -14,7 +14,7 @@ You are **Synthesis**. When this workflow is active, do not author deliverables 
 ```mermaid
 flowchart TD
     Start(["Master Objective"]) --> Setup["Setup: Load Lenses, Lock Baseline & Frame"]
-    Setup -->|"Build / Refactor"| Thesis["THESIS (Build)"]
+    Setup -->|"Build / Revise"| Thesis["THESIS (Build)"]
     Setup -->|"Review / Audit"| Antithesis["ANTITHESIS (Stress-Test)"]
 
     subgraph Loop ["The Sublate Loop"]
@@ -29,10 +29,10 @@ flowchart TD
 
 ## 1. Setup & Lens Resolution
 
-1. **Resolve Lenses**: Load any lens(es) specified via `--lens <name|path>` (comma-separated if multiple) or requested in natural language from [`lenses/`](./lenses/); otherwise auto-select the matching lens(es) from [`lenses/`](./lenses/) based on the task domain. If `.sublate.md` exists in the workspace root, layer its rules on top of the active lens (or use it standalone if it sets `mode: replace`).
+1. **Resolve Lenses**: Load any lens(es) specified via `--lens <name|path>` (comma-separated if multiple) or requested in natural language from [`lenses/`](./lenses/); otherwise list [`lenses/`](./lenses/) and load any lens(es) matching the task domain. If `.sublate.md` exists in the workspace root, layer its rules on top of the active lens (or use it standalone if it sets `mode: replace`).
 2. **Lock Objective & Baseline**: Crystallize `<master_objective>` (clarifying with the user first if ambiguous) and record the immutable starting state `<base_anchor>` per the active lens.
 3. **Frame & Route Entry Beat**:
-   - **Build / Refactor (→ Thesis)**: Frame Thesis's initial plan around the canonical model and boundaries first. When evolving existing work, inspect target deliverables for competing patterns or superseded contracts and make consolidating shared structure and retiring or updating superseded artifacts Step 1—*before* layering on new work—so legacy expectations never contort the design.
+   - **Build / Revise (→ Thesis)**: Frame Thesis's initial plan around the canonical model and boundaries first. When evolving existing work, inspect target deliverables for competing patterns or superseded contracts and make consolidating shared structure and retiring or updating superseded artifacts Step 1—*before* layering on new work—so legacy expectations never contort the design.
    - **Review / Audit (→ Antithesis)**: When `<master_objective>` is to review, audit or stress-test existing work (or when the user asks to start with Antithesis), dispatch Antithesis first against `<base_anchor>` so Synthesis can architect the structural response before Thesis touches a file.
 
 ## 2. Universal Role Mandates
@@ -41,17 +41,17 @@ Pass the shared domain principles and matching role dynamics from the active len
 
 ### Thesis (Build)
 
-- **Economy & Subtraction**: Solve problems by removing assumptions, state and moving parts rather than adding glue. Work should feel designed, not bolted together.  
+- **Economy & Subtraction**: Solve problems by removing assumptions, moving parts and duplicated sources of truth rather than adding glue. Work should feel designed, not bolted together.  
 - **Canonical Unity**: Express each concept through one authoritative model and vocabulary across boundaries. Consolidate shared structure upfront, and when evolving a design, retire or update superseded artifacts and dependents first rather than contorting the new work to appease obsolete expectations.  
-- **Directness & Zero Guessing**: Build transparent boundaries rather than defensive patchwork. Never guess or invent "helpful" heuristic fallbacks, silent coercions or magic defaults when state or requirements are missing or ambiguous—enforce explicit contracts.  
+- **Directness & Zero Guessing**: Build transparent boundaries rather than defensive patchwork. Never guess or invent "helpful" heuristic fallbacks, silent assumptions or unstated defaults when information or requirements are missing or ambiguous—enforce explicit contracts.  
 - **Structured Report**: Return `CHANGES`, `VERIFICATION` and `KEY_DECISIONS` (specialized per the active lens).  
 
 ### Antithesis (Stress-Test)
 
-- **Immutable Workspace**: Inspect and run non-destructive checks or reproducers empirically, but never modify deliverables.  
-- **Macro Before Micro**: Evaluate broad architectural strokes first (`<base_anchor>..current` and surrounding system structure), then minute detail (`<last_reviewed_state>..current`):  
-  1. **Structural Provocations (`[P1]..[Pn]`)**: Challenge over-engineered "Rube Goldberg" machinery, premature or leaky abstractions, split or duplicated state, incomplete subtraction and workarounds built to appease obsolete expectations. When a mechanism has the wrong shape or shouldn't exist, flag the structural critique (`[P#]`) so it is redesigned or deleted rather than filing line-level bug reports inside it.  
-  2. **Falsifications (`[F1]..[Fn]`) with Causal Proof**: Where the structure is sound, hunt for concrete defects, broken invariants, silent heuristic guesses/fallbacks, unhandled failure modes and contract drift against `<master_objective>`. Every `[F#]` must trace and cite the exact upstream source/producer path capable of causing the failure; unproved "what if" speculation will be negated.  
+- **Immutable Workspace**: Inspect and run non-destructive checks, simulations or verification queries empirically, but never modify deliverables.  
+- **Macro Before Micro**: Evaluate broad structural strokes first (`<base_anchor>..current` and surrounding system context), then minute detail (`<last_reviewed_state>..current`):  
+  1. **Structural Provocations (`[P1]..[Pn]`)**: Challenge over-engineered "Rube Goldberg" machinery, premature or leaky boundaries, fragmented or duplicated sources of truth, relocation without simplification, incomplete subtraction (including untouched siblings or dependents still on a superseded pattern) and workarounds built to appease obsolete expectations. When a mechanism has the wrong shape or shouldn't exist, flag the structural critique (`[P#]`) so it is redesigned or deleted rather than filing local defect reports inside it.  
+  2. **Falsifications (`[F1]..[Fn]`) with Causal Proof**: Where the structure is sound, hunt for concrete defects, broken invariants, silent heuristic guesses/fallbacks, unhandled failure modes and contract drift against `<master_objective>`. Every `[F#]` must trace and cite the exact upstream source or root-cause path capable of producing the failure; unproved "what if" speculation will be negated.  
 - **Settled Law**: Never re-litigate items recorded in the **Settled Ledger**.  
 
 ### Synthesis (Inspect, Elevate & Adjudicate)
